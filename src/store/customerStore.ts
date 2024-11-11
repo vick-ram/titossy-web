@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import {post, get, del, patch, put} from '../boot'
+import {post, get, patch, put} from '../boot'
 import { ApiResponse, Customer } from '../models/constants'
 
 export const useCustomerStore = defineStore('customer', {

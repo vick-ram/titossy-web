@@ -167,6 +167,8 @@ router.beforeEach((to: RouteLocationNormalizedGeneric, from: RouteLocationNormal
     const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
     const isAuthenticated = localStorage.getItem('token');
 
+    console.log('Navigating from', from.fullPath, 'to', to.fullPath);
+
     if (requiresAuth && !isAuthenticated) {
         next({name: 'sign-in'});
     } else {

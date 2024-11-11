@@ -73,15 +73,15 @@ const generateReceipt = () => {
     pdf.setFontSize(16)
     pdf.text('Titossy Cleaning Services', 105, 40, { align: 'center' })
 
-    const tableBody = transactionStore.customerPayments.map((transaction) => {
-        transaction.bookingItems.map((item) => {
-            return [
-                item.service ? item.service : item.serviceAddOn,
-                item.quantity,
-                item.subtotal
-            ]
-        })
-    })
+    // const tableBody = transactionStore.customerPayments.map((transaction) => {
+    //     transaction.bookingItems.map((item) => {
+    //         return [
+    //             item.service ? item.service : item.serviceAddOn,
+    //             item.quantity,
+    //             item.subtotal
+    //         ]
+    //     })
+    // })
     autoTable(pdf,{
         head: [['Service', 'Quantity', 'Subtotal']],
         //body: tableBody,

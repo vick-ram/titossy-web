@@ -77,7 +77,7 @@
 
 <script setup lang="ts">
 import ElevatedCard from '../components/ElevatedCard.vue';
-import {useWebsocket} from '../utils/useWebsocket'
+// import {useWebsocket} from '../utils/useWebsocket'
 
 // Sample data structure
 const messages = [
@@ -97,9 +97,9 @@ const messages = [
     },
 ];
 
-const handleSend = () => {
-    // Send message to the server
-};
+// const handleSend = () => {
+//     // Send message to the server
+// };
 
 
 </script>
