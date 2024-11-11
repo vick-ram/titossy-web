@@ -23,12 +23,12 @@ export const useCustomerStore = defineStore('customer', {
     actions: {
         async create() {
             try {
-                const res = await post<ApiResponse<Customer>>('/customer', this.customerData)
+                const res = await post<ApiResponse<Customer>>('/customer/auth/sign_up', this.customerData)
                 if (res.data.status === 'success') {
                     if (res.data.data) {
                         this.customer = res.data.data
+                        this.successMessage = String(res.data.message)
                     }
-                    this.getAll()
                 }
 
                 if (res.data.status === 'error') {
@@ -93,12 +93,11 @@ export const useCustomerStore = defineStore('customer', {
 
         async updateStatus(id: string, status: string) {
             try {
-                const res = await patch<ApiResponse<null>>(`/customer/${id}/status`, {status})
+                const res = await patch<ApiResponse<null>>(`/customer/${id}`, {status: status})
                 if (res.data.status === 'success') {
                     if (res.data.message) {
                         this.successMessage = res.data.message
                     }
-                    this.getOne(id)
                 }
 
                 if (res.data.status === 'error') {
@@ -108,23 +107,5 @@ export const useCustomerStore = defineStore('customer', {
                 this.errorMessages = String(error)
             }
         },
-
-        async delete(id: string) {
-            try {
-                const res = await del<ApiResponse<null>>(`/customer/${id}`)
-                if (res.data.status === 'success') {
-                    if (res.data.message) {
-                        this.successMessage = res.data.message
-                    }
-                    this.getAll()
-                }
-
-                if (res.data.status === 'error') {
-                    throw new Error(res.data.error)
-                }
-            } catch (error) {
-                this.errorMessages = String(error)
-            }
-        }
     }
 })

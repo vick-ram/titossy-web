@@ -151,18 +151,10 @@
         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
-                    <th scope="col" class="px-6 py-3">
-                        Product name
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Color
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Category
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Price
-                    </th>
+                    <th scope="col" class="px-6 py-3">Product name</th>
+                    <th scope="col" class="px-6 py-3">Color</th>
+                    <th scope="col" class="px-6 py-3">Category</th>
+                    <th scope="col" class="px-6 py-3">Price</th>
                 </tr>
             </thead>
             <tbody>
@@ -249,12 +241,12 @@ const totalUsers = computed(() => {
     return (customerTotal + supplierTotal + employeeTotal)
 })
 
-console.log(totalUsers.value)
-
 onMounted(async () => {
     await customerStore.getAll()
     await supplierStore.getAll()
     await employeeStore.getAll()
+    await productStore.getAll()
+    await serviceStore.getAllServices()
 })
 
 

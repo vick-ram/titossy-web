@@ -13,7 +13,6 @@
         <div>
             <label for="gender" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Gender</label>
             <select v-model="employeeStore.employeeData.gender" id="gender" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                <option selected>Choose Gender</option>
                 <option v-for="(value, key) in gender" :key="key" :value="value">{{value}}</option>
             </select>
         </div>  
@@ -24,7 +23,6 @@
         <div>
             <label for="role" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Role</label>
             <select v-model="employeeStore.employeeData.role" id="role" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                <option selected>Choose Role</option>
                 <option v-for="(role, key) in roles" :key="key" :value="role">{{ role }}</option>
             </select>
         </div>
@@ -49,7 +47,6 @@ import { Roles, Gender } from '../utils/constants';
 import { useRouter } from 'vue-router'
 import { useEmployeeStore } from '../store/employeeStore'
 import {useToastStore} from '../store/toastStore'
-import { flattenArray } from '../utils/flattenArray';
 
 
 const toastStore = useToastStore()
@@ -59,24 +56,17 @@ const roles = Object.values(Roles).filter(key => isNaN(Number(key)))
 const gender = Object.values(Gender).filter(key => isNaN(Number(key)))
 
 
-const handleErrors = () => {
-    const errors = employeeStore.errorMessages
-
-    const errorMessages = flattenArray(Object.values(errors))
-
-    errorMessages.forEach((mess) => {
-        toastStore.showToast(mess, 'error')
-    })
-}
 
 const createEmployee = async () => {
     await employeeStore.signup()
 
-    if (employeeStore.successMessage && !employeeStore.errorMessages) {
+    if (employeeStore.successMessage) {
+        toastStore.showToast(employeeStore.successMessage, 'success')
         router.push({name: 'employee'})
-    } else {
-        handleErrors()
-        console.log(employeeStore.errorMessages)
+    }
+
+    if (employeeStore.errorMessage) {
+        toastStore.showToast(employeeStore.errorMessage, 'error')
     }
 }
 </script>

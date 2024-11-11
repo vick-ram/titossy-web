@@ -168,13 +168,23 @@ const createService = async () => {
             }
         })
         if (response.data.status === 'succcess') {
-            toastStore.showToast(String(response.data.message), 'success')
+            setTimeout(() => {
+                toastStore.showToast(String(response.data.message), 'success')
+            }, 3000)
         }
         if (response.data.status === 'error') {
             throw new Error(String(response.data.error))
         }
     } catch (e) {
-        toastStore.showToast(String(e), 'error')
+        if (e instanceof Error) {
+            setTimeout(() => {
+                toastStore.showToast(e.message, 'error')
+            }, 3000)
+        } else {
+                setTimeout(() => {
+                toastStore.showToast(String(e), 'error')
+            }, 3000)
+        }
     } finally {
         isDrawerOpen.value = !isDrawerOpen.value
     }

@@ -22,5 +22,5 @@ This is a web admin for the Titossy project. It is a web application that allows
 1. Clone the repository:
 
 ```bash
-git clone htttps://github.com/titossy/titossy-web-admin.git
+git clone htttps://github.com/titossy/titossy-web.git
 ```

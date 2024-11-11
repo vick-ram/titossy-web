@@ -4,12 +4,15 @@
         <div>
             <button @click="$router.push({name: 'customer_create'})" type="button" class="bg-blue-700 hover:bg-blue-800 text-white ocus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Create</button>
         </div>
+        <div class="flex flex-row items-center gap-2">
         <label for="table-search" class="sr-only">Search</label>
         <div class="relative">
             <div class="absolute inset-y-0 left-0 rtl:inset-r-0 rtl:right-0 flex items-center ps-3 pointer-events-none">
                 <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path></svg>
             </div>
-            <input type="text" id="table-search" class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search for items">
+            <input v-model="query" type="text" id="table-search" class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search for items">
+        </div>
+        <button @click="exportToCSV" type="button" class="bg-green-500 hover:bg-green-600 text-white focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 focus:outline-none dark:focus:ring-green-800">Export</button>
         </div>
     </div>
     <div class="w-full overflow-x-auto shadow-md rounded-lg">
@@ -28,18 +31,22 @@
             </tr>
         </thead>
         <tbody>
-            <tr v-for="customer in customerStore.customers" :key="customer.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hoveur:bg-gray-600">
+            <tr v-for="customer in filteredCustomers" :key="customer.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hoveur:bg-gray-600">
                 <td class="px-6 py-4">{{ customer.id }}</td>
                 <td class="px-6 py-4">{{ customer.fullName }}</td>
                 <td class="px-6 py-4">{{ customer.phone }}</td>
                 <td class="px-6 py-4">{{ customer.address }}</td>
                 <td class="px-6 py-4">{{ customer.email }}</td>
-                <td class="px-6 py-4">{{ customer.status }}</td>
-                <td class="px-6 py-4">{{ customer.createdAt }}</td>
-                <td class="px-6 py-4">{{ customer.updatedAt }}</td>
-                <td class="px-6 py-4 flex flex-row items-center justify-center gap-2">
+                <td class="px-6 py-4">
+                    <button @click="updateStatus(customer)">
+                        <span :class="{'text-orange-500': customer.status === 'PENDING', 'text-green-500': customer.status === 'APPROVED'}">{{ customer.status }}</span>
+                    </button>
+                </td>
+                <td class="px-6 py-4">{{ formatDateTime(customer.createdAt) }}</td>
+                <td class="px-6 py-4">{{ formatDateTime(customer.updatedAt) }}</td>
+                <td class="px-6 py-4 flex flex-row items-center justify-center gap-2 relative">
                     <span class="material-symbols-outlined cursor-pointer text-blue-600">visibility</span>
-                    <span class="material-symbols-outlined cursor-pointer text-red-500">delete</span>
+                    <span @click="deleteCustomer(customer)" class="material-symbols-outlined cursor-pointer text-red-500">delete</span>
                 </td>
             </tr>
         </tbody>
@@ -63,13 +70,104 @@
 </template>
 
 <script setup lang="ts">
-import {onMounted} from 'vue'
+import {computed, onMounted, ref} from 'vue'
 import { useCustomerStore } from '../store/customerStore'
+import {useToastStore} from '../store/toastStore'
+import { genericFilter } from '../utils/genericFilter';
+import { formatDateTime } from '../utils/dateFormatter';
+import { Customer } from '../models/constants';
+import { del } from '../boot'
+import { AxiosResponse } from 'axios';
+
+
+const customerStore = useCustomerStore()
+const toastStore = useToastStore()
+const query = ref('')
+
+
+const filteredCustomers = computed(() => {
+    return genericFilter(customerStore.customers, query.value, ['fullName', 'phone', 'address', 'email', 'status'])
+})
+
+const updateStatus = async (customer: Customer) => {
+    if (customer.status === 'PENDING') {
+        await customerStore.updateStatus(customer.id, 'APPROVED')
+    } else if (customer.status === 'APPROVED') {
+        await customerStore.updateStatus(customer.id, 'PENDING')
+    } else {
+        await customerStore.updateStatus(customer.id, customer.status)
+    }
+
+    if (customerStore.successMessage) {
+        customerStore.getAll()
+        toastStore.showToast(customerStore.successMessage, 'success')
+    }
+
+    if (customerStore.errorMessages) {
+        toastStore.showToast(customerStore.errorMessages, 'error')
+    }
+    
+}
+
+const deleteCustomer = (customer: Customer) => {
+    if (!confirm('Are you sure you want to delete this customer?')) return
+    del(`/customer/${customer.id}`)
+        .then((response: AxiosResponse) => {
+            if (response.data.status === 'success') {
+                customerStore.customers = customerStore.customers.filter((cust) => {
+                cust.id !== customer.id
+                })
+                customerStore.getAll()
+                toastStore.showToast(response.data.message, 'success')
+            }
+            if (response.data.status === 'error') {
+            throw new Error(response.data.error)
+            }
+        
+        })
+        .catch((e) => {
+        toastStore.showToast(e.message, 'error')
+    })
+}
+
+const exportToCSV = () => {
+    const customers = customerStore.customers
+
+    const headers = ['ID', 'Full Name', 'Phone', 'Address', 'Email', 'Status', 'Created At', 'Updated At']
+
+    const rows = customers.map((customer) => {
+        return [
+            customer.id,
+            customer.fullName,
+            customer.phone,
+            customer.address,
+            customer.email,
+            customer.status,
+            formatDateTime(customer.createdAt),
+            formatDateTime(customer.updatedAt)
+        ]
+    })
+
+    const csvContent = [
+        headers.join(','),
+        ...rows.map(row => row.join(','))
+    ].join('\n')
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
+
+    const link = document.createElement('a')
+    link.href = URL.createObjectURL(blob)
+    link.download = 'customers.csv'
+    link.style.display = 'none'
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+}
 
 
 onMounted(async () => {
     await customerStore.getAll()
 })
 
-const customerStore = useCustomerStore()
+
 </script>

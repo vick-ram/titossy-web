@@ -73,22 +73,45 @@ export const useSupplierStore = defineStore('supplier', {
             this.errorMessages = String(res.data.error)
         },
 
-        async updateStatus(id: string, status: string) { 
-            const res = await patch(`/supplier/${id}/status`, {status})
-            if (res.data.status === 'success') {
-                this.successMessage = res.data.message
-                this.getOne(id)
+        async updateStatus(id: string, status: string) {
+            try {
+                const res = await patch<ApiResponse<null>>(`/supplier/${id}`, { status: status })
+                if (res.data.status === 'success') {
+                    if (res.data.message) {
+                        this.successMessage = res.data.message
+                    }
+                }
+                if (res.data.status === 'error') {
+                    throw new Error(res.data.error)
+                }
+            } catch (error) {
+                if (error instanceof Error) {
+                    this.errorMessages = error.message
+                } else {
+                    this.errorMessages = String(error)
+                }
             }
-            this.errorMessages = String(res.data.error)
         },
 
         async delete(id: string) {
-            const res = await del(`/supplier/${id}`)
-            if (res.data.status === 'success') {
-                this.successMessage = res.data.message
-                this.getAll()
+            try {
+                const res = await del<ApiResponse<null>>(`/supplier/${id}`)
+                if (res.data.status === 'success') {
+                    if (res.data.message) {
+                        this.successMessage = res.data.message
+                    }
+                }
+
+                if (res.data.status === 'error') {
+                    throw new Error(res.data.error)
+                }
+            } catch (e) {
+                if (e instanceof Error) {
+                    this.errorMessages = e.message
+                } else {
+                    this.errorMessages = String(e)
+                }
             }
-            this.errorMessages = String(res.data.error)
         }
     }
 })

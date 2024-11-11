@@ -144,3 +144,53 @@ export interface Addon {
     createdAt: string;
     updatedAt: string;
 }
+
+export interface Message {
+    id: string;
+    message: string;
+    sender: string;
+    receiver: string;
+    timestamp: string;
+}
+
+interface BookingItem {
+    service?: string;
+    serviceAddOn?: string;
+    quantity: number;
+    subtotal: string;
+}
+
+export interface CustomerTransaction {
+    paymentId: string;
+    bookingId: string;
+    bookingItems: BookingItem[];
+    amount: string;
+    paymentMethod: string;
+    phoneNumber: string;
+    transactionCode: string;
+    paymentStatus: string;
+    createdAt: string;
+    updatedAt: string;
+}
+
+interface BookingServiceAddon { 
+    service: string | null;
+    serviceAddOn: string | null;
+    quantity: number;
+    subtotal: string;
+}
+
+export interface Booking { 
+    bookingId: string;
+    customer: string;
+    bookingDateTime: string;
+    frequency: string;
+    additionalInstructions: string | null;
+    address: string | null;
+    bookingServiceAddOns: BookingServiceAddon[];
+    totalAmount: string;
+    paid: boolean;
+    bookingStatus: string;
+    createdAt: string;
+    updatedAt: string;
+}

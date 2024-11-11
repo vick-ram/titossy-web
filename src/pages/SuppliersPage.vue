@@ -4,12 +4,15 @@
         <div>
             <button @click="$router.push({name: 'supplier_create'})" type="button" class="bg-blue-700 hover:bg-blue-800 text-white ocus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Create</button>
         </div>
-        <label for="table-search" class="sr-only">Search</label>
+        <div class="flex flex-row items-center gap-2">
+            <label for="table-search" class="sr-only">Search</label>
         <div class="relative">
             <div class="absolute inset-y-0 left-0 rtl:inset-r-0 rtl:right-0 flex items-center ps-3 pointer-events-none">
                 <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path></svg>
             </div>
             <input v-model="searchText" type="text" id="table-search" class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search for supplier">
+        </div>
+         <button @click="exportToCSV" type="button" class="bg-green-500 hover:bg-green-600 text-white focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 focus:outline-none dark:focus:ring-green-800">Export</button>
         </div>
     </div>
     <div class="w-full overflow-x-auto rounded-lg shadow-lg">
@@ -38,12 +41,16 @@
                 <td class="px-6 py-4">{{ supplier.phone }}</td>
                 <td class="px-6 py-4">{{ supplier.address }}</td>
                 <td class="px-6 py-4">{{ supplier.email }}</td>
-                <td class="px-6 py-4">{{ supplier.status }}</td>
+                <td class="px-6 py-4">
+                    <button @click="updateStatus(supplier)">
+                        <span :class="{'text-orange-500': supplier.status === 'PENDING', 'text-green-500': supplier.status === 'APPROVED'}">{{ supplier.status }}</span>
+                    </button>
+                </td>
                 <td class="px-6 py-4">{{ formatDateTime(supplier.createdAt) }}</td>
                 <td class="px-6 py-4">{{ formatDateTime(supplier.updatedAt) }}</td>
                 <td class="px-6 py-4 flex flex-row items-center justify-center gap-2">
                     <span class="material-symbols-outlined cursor-pointer text-blue-600">visibility</span>
-                    <span class="material-symbols-outlined cursor-pointer text-red-500">delete</span>
+                    <span @click="deleteSupplier(supplier.id)" class="material-symbols-outlined cursor-pointer text-red-500">delete</span>
                 </td>
             </tr>
         </tbody>
@@ -67,17 +74,87 @@
 </template>
 
 <script setup lang="ts">
-import { Ref, ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import {genericFilter} from '../utils/genericFilter';
 import {useSupplierStore} from '../store/supplierStore'
 import { formatDateTime } from '../utils/dateFormatter';
+import {useToastStore} from '../store/toastStore'
+import { Supplier } from '../models/constants';
 
 const supplierStore = useSupplierStore()
 const searchText = ref('')
+const toastStore = useToastStore()
 
 const filteredSuppliers = computed(() => {
   return genericFilter(supplierStore.suppliers, searchText.value, ['fullName', 'company', 'phone', 'email'])
 })
+
+const updateStatus = async (supplier: Supplier) => {
+    if (supplier.status === 'PENDING') {
+        await supplierStore.updateStatus(supplier.id, 'APPROVED')
+    } else if (supplier.status === 'APPROVED') {
+        await supplierStore.updateStatus(supplier.id, 'PENDING')
+    } else {
+        await supplierStore.updateStatus(supplier.id, supplier.status)
+    }
+
+    if (supplierStore.successMessage) {
+        supplierStore.getAll()
+        toastStore.showToast(supplierStore.successMessage, 'success')
+    }
+    
+    if (supplierStore.errorMessages) {
+        toastStore.showToast(supplierStore.errorMessages, 'error')
+    }
+
+}
+
+const deleteSupplier = async (id: string) => {
+    confirm('Confirm that u want to delete this supplier!')
+    await supplierStore.delete(id)
+    if (supplierStore.successMessage) {
+        toastStore.showToast(supplierStore.successMessage, 'success')
+        supplierStore.getAll()
+    }
+    if (supplierStore.errorMessages) {
+        toastStore.showToast(supplierStore.errorMessages, 'error')
+    }
+}
+
+const exportToCSV = () => {
+    const suppliers = supplierStore.suppliers
+
+    const headers = ['ID', 'Full Name', 'Phone', 'Company', 'Address', 'Email', 'Status', 'Created At', 'Updated At']
+
+    const rows = suppliers.map((supplier) => {
+        return [
+            supplier.id,
+            supplier.fullName,
+            supplier.phone,
+            supplier.company,
+            supplier.address,
+            supplier.email,
+            supplier.status,
+            formatDateTime(supplier.createdAt),
+            formatDateTime(supplier.updatedAt)
+        ]
+    })
+
+    const csvContent = [
+        headers.join(','),
+        ...rows.map(row => row.join(','))
+    ].join('\n')
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
+
+    const link = document.createElement('a')
+    link.href = URL.createObjectURL(blob)
+    link.download = 'supplier.csv'
+    link.style.display = 'none'
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+}
 
 onMounted(async () => {
     await supplierStore.getAll()

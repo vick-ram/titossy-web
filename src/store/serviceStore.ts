@@ -1,12 +1,13 @@
 import { defineStore } from "pinia";
 import { Addon, ApiResponse, Service } from "../models/constants";
-import { get } from "../boot";
+import { del, get } from "../boot";
 
 export const useServiceStore = defineStore('service', {
     state: () => ({
         services: [] as Service[],
         addons: [] as Addon[],
-        errorMessage: ''
+        errorMessage: '',
+        successMessage: ''
     }),
 
     actions: {
@@ -45,5 +46,25 @@ export const useServiceStore = defineStore('service', {
                 this.errorMessage = String(e)
             }
         },
+
+        async deleteService(serviceId: string) {
+            try {
+                const response = await del<ApiResponse<null>>(`/service/${serviceId}`)
+                if (response.data.status === 'success') {
+                    if (response.data.message) {
+                        this.successMessage = response.data.message
+                    }
+                }
+                if (response.data.status === 'error') {
+                    throw new Error(response.data.error)
+                }
+            } catch (error) {
+                if (error instanceof Error) {
+                    this.errorMessage = error.message
+                } else {
+                    this.errorMessage = String(error)
+                }
+            }
+        }
     }
 })
