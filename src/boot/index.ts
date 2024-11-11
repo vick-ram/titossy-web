@@ -1,7 +1,7 @@
 import axios, { AxiosInstance, AxiosResponse, AxiosRequestConfig, InternalAxiosRequestConfig } from "axios";
 
 const axiosInstance: AxiosInstance = axios.create({
-    baseURL: "http://localhost:8080/api",
+    baseURL: "https://vickram.tech/api",
     timeout: 10000,
     headers: {
         "Content-Type": "application/json",
