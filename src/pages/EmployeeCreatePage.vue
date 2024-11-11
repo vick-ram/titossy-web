@@ -46,7 +46,7 @@ import ElevatedCard from '../components/ElevatedCard.vue';
 import { Roles, Gender } from '../utils/constants';
 import { useRouter } from 'vue-router'
 import { useEmployeeStore } from '../store/employeeStore'
-import {useToastStore} from '../store/toastStore'
+import { useToastStore } from '../store/toastStore'
 
 
 const toastStore = useToastStore()

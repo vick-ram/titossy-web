@@ -57,7 +57,6 @@ import ElevatedCard from '../components/ElevatedCard.vue';
 import {useTransactionStore } from '../store/transactionStore'
 import { onMounted } from 'vue';
 import LogoImage from '../assets/images/titossy-logo.png'
-import { CustomerPayment, CustomerTransaction } from '../models/constants';
 
 const transactionStore = useTransactionStore()
 

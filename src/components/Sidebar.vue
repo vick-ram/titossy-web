@@ -148,9 +148,6 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useConstants} from '../store/constants'
-
-const constants = useConstants()
 
 const isUsersDropdownOpen = ref(false)
 const toggleUsersDropdown = () => isUsersDropdownOpen.value = !isUsersDropdownOpen.value

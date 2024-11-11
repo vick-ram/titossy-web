@@ -28,8 +28,6 @@
 </template>
 
 <script setup lang="ts">
-import { post } from '../boot';
-import { ApiResponse } from '../models/constants';
 
 
 const serviceData = {
