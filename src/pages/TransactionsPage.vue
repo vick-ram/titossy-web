@@ -17,7 +17,7 @@
                         <th class="px-4 py-2 bg-gray-100 dark:bg-gray-700">#</th>
                         <th class="px-4 py-2 bg-gray-100 dark:bg-gray-700">ID</th>
                         <th class="px-4 py-2 bg-gray-100 dark:bg-gray-700">bookingid</th>
-                        <th class="px-4 py-2 bg-gray-100 dark:bg-gray-700">amount</th>
+                        <th class="px-4 py-2 bg-gray-100 dark:bg-gray-700">amount(kes)</th>
                         <th class="px-4 py-2 bg-gray-100 dark:bg-gray-700">method</th>
                         <th class="px-4 py-2 bg-gray-100 dark:bg-gray-700">phone</th>
                         <th class="px-4 py-2 bg-gray-100 dark:bg-gray-700">code</th>

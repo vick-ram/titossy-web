@@ -92,7 +92,7 @@ const searchQuery = ref('');
 const toastStore = useToastStore()
 
 const filteredEmployees = computed(() => {
-    return genericFilter(employeeStore.employees, searchQuery.value, ['fullName', 'role', 'approvalStatus', 'email', 'phone'])
+    return genericFilter(employeeStore.employees, searchQuery.value, ['id', 'fullName', 'role', 'approvalStatus', 'email', 'phone'])
 })
 
 const deleteEmployee = async (id: string) => {

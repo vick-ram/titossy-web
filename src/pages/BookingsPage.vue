@@ -21,7 +21,7 @@
                     <th class="px-4 py-2 bg-gray-100 dark:bg-gray-700">frequency</th>
                     <th class="px-4 py-2 bg-gray-100 dark:bg-gray-700">instructions</th>
                     <th class="px-4 py-2 bg-gray-100 dark:bg-gray-700">address</th>
-                    <th class="px-4 py-2 bg-gray-100 dark:bg-gray-700">amount</th>
+                    <th class="px-4 py-2 bg-gray-100 dark:bg-gray-700">amount(kes)</th>
                     <th class="px-4 py-2 bg-gray-100 dark:bg-gray-700">paid</th>
                     <th class="px-4 py-2 bg-gray-100 dark:bg-gray-700">status</th>
                     <th class="px-4 py-2 bg-gray-100 dark:bg-gray-700">created-at</th>
