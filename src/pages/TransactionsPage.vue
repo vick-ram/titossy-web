@@ -37,8 +37,8 @@
                         <td class="px-4 py-2">{{ transaction.phoneNumber }}</td>
                         <td class="px-4 py-2">{{ transaction.transactionCode }}</td>
                         <td class="px-4 py-2">{{ transaction.paymentStatus }}</td>
-                        <td class="px-4 py-2">{{ transaction.createdAt }}</td>
-                        <td class="px-4 py-2">{{ transaction.updatedAt }}</td>
+                        <td class="px-4 py-2">{{ formatDateTime(transaction.createdAt) }}</td>
+                        <td class="px-4 py-2">{{ formatDateTime(transaction.updatedAt) }}</td>
                         <td class="px-4 py-2">
                             <button class="text-blue-500">Edit</button>
                             <button class="text-red-500">Delete</button>
@@ -57,6 +57,7 @@ import ElevatedCard from '../components/ElevatedCard.vue';
 import {useTransactionStore } from '../store/transactionStore'
 import { onMounted } from 'vue';
 import LogoImage from '../assets/images/titossy-logo.png'
+import { formatDateTime } from '../utils/dateFormatter';
 
 const transactionStore = useTransactionStore()
 

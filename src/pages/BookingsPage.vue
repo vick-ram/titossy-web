@@ -41,8 +41,8 @@
                     <td class="px-4 py-2">{{ booking.totalAmount }}</td>
                     <td class="px-4 py-2">{{ booking.paid }}</td>
                     <td class="px-4 py-2">{{ booking.bookingStatus }}</td>
-                    <td class="px-4 py-2">{{ booking.createdAt }}</td>
-                    <td class="px-4 py-2">{{ booking.updatedAt }}</td>
+                    <td class="px-4 py-2">{{ formatDateTime(booking.createdAt) }}</td>
+                    <td class="px-4 py-2">{{ formatDateTime(booking.updatedAt) }}</td>
                     <td class="px-4 py-2">
                         <button class="text-blue-500">Edit</button>
                         <button class="text-red-500">Delete</button>
@@ -59,6 +59,7 @@
 import { computed, onMounted, ref } from 'vue';
 import {useBookingStore} from '../store/bookingStore'
 import { genericFilter } from '../utils/genericFilter';
+import { formatDateTime } from '../utils/dateFormatter';
 
 const bookingStore = useBookingStore()
 const search = ref('');
