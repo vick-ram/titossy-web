@@ -1,5 +1,5 @@
 <template>
-<div class="w-full mt-4">
+<ElevatedCard class="mt-5">
     <div class="flex flex-column sm:flex-row flex-wrap space-y-4 sm:space-y-0 items-center justify-between pb-4">
         <div>
             <button @click="$router.push({name: 'employee_create'})" type="button" class="bg-blue-700 hover:bg-blue-800 text-white focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Create</button>
@@ -15,9 +15,9 @@
         <button @click="exportToCSV" type="button" class="bg-green-500 hover:bg-green-600 text-white focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 focus:outline-none dark:focus:ring-green-800">Export</button>
         </div>
     </div>
-    <div class="w-full overflow-x-auto shadow-lg rounded-lg p-4">
+    <div class="w-full overflow-x-auto shadow-md rounded-lg">
     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-        <thead class="text-xs text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
             <tr>
                 <th scope="col" class="px-6 py-3">#</th>
                 <th scope="col" class="px-6 py-3">ID</th>
@@ -74,7 +74,7 @@
             </li>
         </ul>
     </nav>
-</div>
+</ElevatedCard>
 
 </template>
 
@@ -85,7 +85,8 @@ import {useEmployeeStore} from '../store/employeeStore'
 import { genericFilter } from '../utils/genericFilter';
 import { formatDateTime } from '../utils/dateFormatter';
 import { Employee } from '../models/constants';
-import {useToastStore} from '../store/toastStore'
+import { useToastStore } from '../store/toastStore'
+import ElevatedCard from '../components/ElevatedCard.vue';
 
 const employeeStore = useEmployeeStore()
 const searchQuery = ref('');

@@ -1,5 +1,5 @@
 <template>
-    <div class="w-full shadow-md">
+    <ElevatedCard class="mt-5">
         <div class="w-full flex flex-row justify-end px-2 mb-4">
             <label for="table-search" class="sr-only">Search</label>
         <div class="relative">
@@ -21,39 +21,68 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="activity in paginatedActivityLogs" :key="activity.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hoveur:bg-gray-600">
+                <tr v-for="activity in paginatedLogs" :key="activity.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hoveur:bg-gray-600">
                     <td class="px-6 py-4">
                         {{ activityLogStore.activityLogs.indexOf(activity) + 1 }}
                     </td>
-                    <td class="border px-6 py-4">{{ activity.id }}</td>
-                    <td class=" border px-6 py-4">{{ activity.userId }}</td>
-                    <td class="border px-6 py-4">{{ formatDateTime(activity.timestamp) }}</td>
-                    <td class="border px-6 py-4">{{ activity.eventType }}</td>
-                    <td class="border px-6 py-4">{{ activity.eventData }}</td>
+                    <td class="px-6 py-4">{{ activity.id }}</td>
+                    <td class="px-6 py-4">{{ activity.userId }}</td>
+                    <td class="px-6 py-4">{{ formatDateTime(activity.timestamp) }}</td>
+                    <td class="px-6 py-4">{{ activity.eventType }}</td>
+                    <td class="px-6 py-4">{{ activity.eventData }}</td>
                 </tr>
             </tbody>
         </table>
-        <div class="flex justify-between items-center mt-4 mb-3 p-2 space-x-2">
-            <div>
-                <p>Showing 10 of <span>{{ activityLogStore.activityLogs.length }}</span></p>
-            </div>
-            <div>
-                <button
-                    @click="goToPage(currentPage - 1)"
-                    :disabled="currentPage === 1"
-                    class="px-4 py-2 border rounded-lg text-gray-500 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300 disabled:bg-gray-300 dark:disabled:bg-gray-600 disabled:text-gray-400 disabled:cursor-not-allowed">
-                    Previous
-                </button>
-                <span class="px-4 py-2">{{ currentPage }} / {{ totalPages }}</span>
-                <button
-                    @click="goToPage(currentPage + 1)"
-                    :disabled="currentPage === totalPages"
-                    class="px-4 py-2 border rounded-lg text-gray-500 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300 disabled:bg-gray-300 dark:disabled:bg-gray-600 disabled:text-gray-400 disabled:cursor-not-allowed">
-                    Next
-                </button>
-            </div>
-        </div>
-    </div>
+            <nav class="flex items-center flex-column flex-wrap md:flex-row justify-between pt-4" aria-label="Table navigation">
+        <span class="text-sm font-normal text-gray-500 dark:text-gray-400 mb-4 md:mb-0 block w-full md:inline md:w-auto">
+            Showing <span class="font-semibold text-gray-900 dark:text-white">{{ startIndex }}-{{ endIndex }}</span> of <span class="font-semibold text-gray-900 dark:text-white">{{ totalActivities }}</span>
+        </span>
+        <ul class="inline-flex -space-x-px rtl:space-x-reverse text-sm h-8">
+            <!-- Previous Button -->
+            <li>
+                <a
+                    href="#"
+                    @click.prevent="goToPage(currentPage - 1)"
+                    :class="{
+                        'text-gray-500 bg-white': currentPage > 1,
+                        'text-gray-300 bg-gray-100': currentPage <= 1
+                    }"
+                    class="flex items-center justify-center px-3 h-8 ms-0 leading-tight border border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                    :disabled="currentPage <= 1"
+                >Previous</a>
+            </li>
+
+            <!-- Dynamic Page Numbers -->
+            <li v-for="page in pages" :key="page">
+                <a
+                    href="#"
+                    @click.prevent="goToPage(page)"
+                    :class="{
+                        'text-gray-900 bg-white': page === currentPage,
+                        'text-gray-500 bg-white': page !== currentPage
+                    }"
+                    class="flex items-center justify-center px-3 h-8 leading-tight border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                >
+                    {{ page }}
+                </a>
+            </li>
+
+            <!-- Next Button -->
+            <li>
+                <a
+                    href="#"
+                    @click.prevent="goToPage(currentPage + 1)"
+                    :class="{
+                        'text-gray-500 bg-white': currentPage < totalPages,
+                        'text-gray-300 bg-gray-100': currentPage >= totalPages
+                    }"
+                    class="flex items-center justify-center px-3 h-8 leading-tight border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                    :disabled="currentPage >= totalPages"
+                >Next</a>
+            </li>
+        </ul>
+    </nav>
+    </ElevatedCard>
 </template>
 
 <script setup lang="ts">
@@ -61,6 +90,8 @@ import { onMounted, ref, computed } from 'vue';
 import { useActivityLogStore } from '../store/activityLogStore';
 import { formatDateTime } from '../utils/dateFormatter';
 import { genericFilter } from '../utils/genericFilter';
+import { paginate } from '../utils/pagination';
+import ElevatedCard from '../components/ElevatedCard.vue';
 
 const activityLogStore = useActivityLogStore();
 const isLoading = ref(false)
@@ -73,13 +104,26 @@ const filteredActivityLogs = computed(() => {
     return genericFilter(activityLogStore.activityLogs, query.value, ['id', 'userId', 'timestamp', 'eventType', 'eventData'])
 })
 
-const paginatedActivityLogs = computed(() => {
-    const start = (currentPage.value - 1) * itemsPerPage.value
-    const end = start + itemsPerPage.value
-    return filteredActivityLogs.value.slice(start, end)
+const paginatedLogs = computed(() => {
+    return paginate(filteredActivityLogs.value, currentPage.value, itemsPerPage.value)
 })
 
-const totalPages = computed(() => Math.ceil(filteredActivityLogs.value.length / itemsPerPage.value))
+const totalActivities = computed(() => activityLogStore.activityLogs.length)
+const totalPages = computed(() => Math.ceil(activityLogStore.activityLogs.length / itemsPerPage.value))
+
+const pages = computed(() => {
+    const numberOfPages = totalPages.value
+    const visiblePages = [];
+
+    for (let i = 1; i <= numberOfPages; i++) {
+        visiblePages.push(i)
+    }
+
+    return visiblePages;
+})
+
+const startIndex = computed(() => (currentPage.value - 1) * itemsPerPage.value + 1);
+const endIndex = computed(() => Math.min(currentPage.value * itemsPerPage.value, totalActivities.value));
 
 onMounted(async () => {
     isLoading.value = true

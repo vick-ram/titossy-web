@@ -1,7 +1,4 @@
 <template>
-  <aside
-      class="w-64 space-y-6 py-7 px-2 absolute inset-y-0 left-0 transform translate-x-0 md:relative md:translate-x-0 transition duration-200 ease-in-out bg-white dark:bg-gray-900"
-    >
     <div class="flex justify-center mb-4 px-4">
         <RouterLink to="/">
             <img src="../assets/images/titossy-logo.png" alt="titossy logo" class="w-36 h-auto">
@@ -137,7 +134,6 @@
             <span class="font-semibold">Activity Logs</span>
         </RouterLink>
     </nav>
-  </aside>
 </template>
 
 

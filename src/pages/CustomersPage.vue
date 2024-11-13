@@ -1,5 +1,5 @@
 <template>
-<div class="w-full mt-3">
+<ElevatedCard class="mt-5">
     <div class="flex flex-column sm:flex-row flex-wrap space-y-4 sm:space-y-0 items-center justify-between pb-4">
         <div>
             <button @click="$router.push({name: 'customer_create'})" type="button" class="bg-blue-700 hover:bg-blue-800 text-white ocus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Create</button>
@@ -17,8 +17,9 @@
     </div>
     <div class="w-full overflow-x-auto shadow-md rounded-lg">
     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-        <thead class="text-xs text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
             <tr>
+                <th scope="col" class="px-6 py-3">#</th>
                 <th scope="col" class="px-6 py-3">ID</th>
                 <th scope="col" class="px-6 py-3">fullName</th>
                 <th scope="col" class="px-6 py-3">phone</th>
@@ -32,6 +33,7 @@
         </thead>
         <tbody>
             <tr v-for="customer in filteredCustomers" :key="customer.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hoveur:bg-gray-600">
+                <td class="px-6 py-4">{{ customerStore.customers.indexOf(customer) + 1 }}</td>
                 <td class="px-6 py-4">{{ customer.id }}</td>
                 <td class="px-6 py-4">{{ customer.fullName }}</td>
                 <td class="px-6 py-4">{{ customer.phone }}</td>
@@ -53,20 +55,55 @@
     </table>
     </div>
     <nav class="flex items-center flex-column flex-wrap md:flex-row justify-between pt-4" aria-label="Table navigation">
-        <span class="text-sm font-normal text-gray-500 dark:text-gray-400 mb-4 md:mb-0 block w-full md:inline md:w-auto">Showing <span class="font-semibold text-gray-900 dark:text-white">1-10</span> of <span class="font-semibold text-gray-900 dark:text-white">{{ customerStore.customers.length }}</span></span>
+        <span class="text-sm font-normal text-gray-500 dark:text-gray-400 mb-4 md:mb-0 block w-full md:inline md:w-auto">
+            Showing <span class="font-semibold text-gray-900 dark:text-white">{{ startIndex }}-{{ endIndex }}</span> of <span class="font-semibold text-gray-900 dark:text-white">{{ totalCustomers }}</span>
+        </span>
         <ul class="inline-flex -space-x-px rtl:space-x-reverse text-sm h-8">
+            <!-- Previous Button -->
             <li>
-                <a href="#" class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Previous</a>
+                <a
+                    href="#"
+                    @click.prevent="goToPage(currentPage - 1)"
+                    :class="{
+                        'text-gray-500 bg-white': currentPage > 1,
+                        'text-gray-300 bg-gray-100': currentPage <= 1
+                    }"
+                    class="flex items-center justify-center px-3 h-8 ms-0 leading-tight border border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                    :disabled="currentPage <= 1"
+                >Previous</a>
             </li>
-            <li>
-                <a href="#" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">1</a>
+
+            <!-- Dynamic Page Numbers -->
+            <li v-for="page in pages" :key="page">
+                <a
+                    href="#"
+                    @click.prevent="goToPage(page)"
+                    :class="{
+                        'text-gray-900 bg-white': page === currentPage,
+                        'text-gray-500 bg-white': page !== currentPage
+                    }"
+                    class="flex items-center justify-center px-3 h-8 leading-tight border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                >
+                    {{ page }}
+                </a>
             </li>
+
+            <!-- Next Button -->
             <li>
-                <a href="#" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Next</a>
+                <a
+                    href="#"
+                    @click.prevent="goToPage(currentPage + 1)"
+                    :class="{
+                        'text-gray-500 bg-white': currentPage < totalPages,
+                        'text-gray-300 bg-gray-100': currentPage >= totalPages
+                    }"
+                    class="flex items-center justify-center px-3 h-8 leading-tight border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                    :disabled="currentPage >= totalPages"
+                >Next</a>
             </li>
         </ul>
     </nav>
-</div>
+</ElevatedCard>
 </template>
 
 <script setup lang="ts">
@@ -78,6 +115,7 @@ import { formatDateTime } from '../utils/dateFormatter';
 import { Customer } from '../models/constants';
 import { del } from '../boot'
 import { AxiosResponse } from 'axios';
+import ElevatedCard from '../components/ElevatedCard.vue';
 
 
 const customerStore = useCustomerStore()
@@ -88,6 +126,32 @@ const query = ref('')
 const filteredCustomers = computed(() => {
     return genericFilter(customerStore.customers, query.value, ['fullName', 'phone', 'address', 'email', 'status'])
 })
+
+const totalCustomers = computed(() => customerStore.customers.length)
+const itemsPerPage = ref(10)
+const currentPage = ref(1)
+
+const totalPages = computed(() => Math.ceil(totalCustomers.value / itemsPerPage.value))
+
+const pages = computed(() => {
+    const numberOfPages = totalPages.value
+    const visiblePages = [];
+
+    for (let i = 1; i <= numberOfPages; i++) {
+        visiblePages.push(i)
+    }
+
+    return visiblePages;
+})
+
+const startIndex = computed(() => (currentPage.value - 1) * itemsPerPage.value + 1);
+const endIndex = computed(() => Math.min(currentPage.value * itemsPerPage.value, totalCustomers.value));
+
+const goToPage = (page: number) => {
+    if (page >= 1 && page <= totalPages.value) {
+        currentPage.value = page;
+    }
+};
 
 const updateStatus = async (customer: Customer) => {
     if (customer.status === 'PENDING') {

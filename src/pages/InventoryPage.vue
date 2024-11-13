@@ -1,5 +1,5 @@
 <template>
-<div class="w-full mt-4">
+<ElevatedCard class="mt-5">
     <div class="flex flex-column sm:flex-row flex-wrap space-y-4 sm:space-y-0 items-center justify-between pb-4">
         <div>
             <button @click="$router.push({name: 'product-create'})" type="button" class="bg-blue-700 hover:bg-blue-800 text-white ocus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Create</button>
@@ -67,14 +67,15 @@
             </li>
         </ul>
     </nav>
-</div>
+</ElevatedCard>
 </template>
 
 <script setup lang="ts">
 import { onMounted, ref, computed } from 'vue'
 import { useProductStore } from '../store/productStore'
 import { formatDateTime } from '../utils/dateFormatter'
-import {genericFilter} from '../utils/genericFilter'
+import { genericFilter } from '../utils/genericFilter'
+import ElevatedCard from '../components/ElevatedCard.vue'
 
 const productStore = useProductStore()
 const query = ref('')

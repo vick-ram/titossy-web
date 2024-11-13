@@ -1,8 +1,9 @@
 <template>
     <div class="flex flex-col md:grid md:grid-cols-12 md:gap-4">
-        <div class="col-span-8 md:col-span-8 mt-6">
-            <div class="md:grid md:grid-cols-3 md:gap-3 md:gap-y-8">
-                <ElevatedCard class="relative p-6">
+        <!-- Other Cards (Spanning 8 columns) -->
+        <div class="col-span-8 md:col-span-8 mt-6 md:grid md:grid-cols-3 gap-2">
+            <!-- Cards' grid setup here -->
+             <ElevatedCard class="relative p-6">
                     <div 
                         class="size-16 bg-slate-700 flex justify-center items-center absolute rounded-lg dark:bg-slate-300"
                         style="top: 15px; left: 15px;"
@@ -134,16 +135,18 @@
                     ">
                     <span class="metric">+55% </span>than last week</p>
                 </ElevatedCard>
-            </div>
         </div>
+
+        <!-- Donut Chart Card (Spanning 4 columns) -->
         <div class="col-span-4 mt-6 flex justify-center items-center">
             <ElevatedCard class="py-9">
                 <h4 class="text-gray-600 font-semibold dark:text-slate-100">Inventory Analytics</h4>
                 <div class="py-6" id="donut-chart"></div>
-                <apexchart width="100%" type="donut" :options="chartOptions" :series="series"></apexchart>
+                <apexchart width="110%" type="donut" :options="chartOptions" :series="series"></apexchart>
             </ElevatedCard>
         </div>
     </div>
+
     
     <ElevatedCard class="mt-6">
     <h4 class="mb-5 text-gray-900 font-bold text-base">Customer Recent Transactions</h4>

@@ -1,5 +1,5 @@
 <template>
-    <div class="w-full mt-4">
+    <ElevatedCard class="mt-5">
         <div class="w-full flex flex-row justify-end">
             <!-- Search input -->
             <input
@@ -10,9 +10,9 @@
             />
         </div>
         <!-- Table -->
-         <div class="w-full shadow-lg overflow-x-auto">
+         <div class="w-full overflow-x-auto shadow-md rounded-lg">
         <table class="w-full mt-4 bg-white dark:bg-gray-800 rounded-lg">
-            <thead>
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr class="text-left rtl:text-right">
                     <th class="px-4 py-2 bg-gray-100 dark:bg-gray-700">#</th>
                     <th class="px-4 py-2 bg-gray-100 dark:bg-gray-700">ID</th>
@@ -30,7 +30,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="booking in filteredBookings" :key="booking.bookingId">
+                <tr v-for="booking in filteredBookings" :key="booking.bookingId" class="border-b">
                     <td class="px-4 py-2">{{ bookingStore.bookings.indexOf(booking) + 1 }}</td>
                     <td class="px-4 py-2">{{ booking.bookingId }}</td>
                     <td class="px-4 py-2">{{ booking.customer }}</td>
@@ -51,7 +51,7 @@
             </tbody>
         </table>
         </div>
-    </div>
+    </ElevatedCard>
 </template>
 
 
@@ -60,6 +60,7 @@ import { computed, onMounted, ref } from 'vue';
 import {useBookingStore} from '../store/bookingStore'
 import { genericFilter } from '../utils/genericFilter';
 import { formatDateTime } from '../utils/dateFormatter';
+import ElevatedCard from '../components/ElevatedCard.vue';
 
 const bookingStore = useBookingStore()
 const search = ref('');
