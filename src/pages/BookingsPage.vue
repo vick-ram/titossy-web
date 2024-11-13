@@ -24,8 +24,8 @@
                     <th class="px-4 py-2 bg-gray-100 dark:bg-gray-700">amount(kes)</th>
                     <th class="px-4 py-2 bg-gray-100 dark:bg-gray-700">paid</th>
                     <th class="px-4 py-2 bg-gray-100 dark:bg-gray-700">status</th>
-                    <th class="px-4 py-2 bg-gray-100 dark:bg-gray-700">created-at</th>
-                    <th class="px-4 py-2 bg-gray-100 dark:bg-gray-700">updated-at</th>
+                    <th class="px-4 py-2 bg-gray-100 dark:bg-gray-700">createdat</th>
+                    <th class="px-4 py-2 bg-gray-100 dark:bg-gray-700">updatedat</th>
                     <th class="px-4 py-2 bg-gray-100 dark:bg-gray-700">Actions</th>
                 </tr>
             </thead>
