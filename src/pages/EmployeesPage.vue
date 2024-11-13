@@ -34,7 +34,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr v-for="employee in filteredEmployees" :key="employee.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hoveur:bg-gray-600">
+            <tr v-for="employee in filteredEmployees" :key="employee.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                 <td class="px-6 py-4">{{ employeeStore.employees.indexOf(employee) + 1 }}</td>
                 <td class="px-6 py-4">{{ employee.id }}</td>
                 <td class="px-6 py-4">{{ employee.username }}</td>

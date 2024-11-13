@@ -31,20 +31,20 @@
             </tr>
         </thead>
         <tbody>
-            <tr v-for="product in filteredProducts" :key="product.productId" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hoveur:bg-gray-600">
+            <tr v-for="product in filteredProducts" :key="product.productId" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                 <td class="px-6 py-4">{{ productStore.products.indexOf(product) + 1 }}</td>
-                <td class="border px-6 py-4">{{ product.productId }}</td>
-                <td class=" border px-6 py-4">{{ product.name }}</td>
-                <td class="border px-6 py-4">{{ product.description }}</td>
-                <td class="border px-6 py-4">{{ product.unitPrice }}</td>
+                <td class="px-6 py-4">{{ product.productId }}</td>
+                <td class="px-6 py-4">{{ product.name }}</td>
+                <td class="px-6 py-4">{{ product.description }}</td>
+                <td class="px-6 py-4">{{ product.unitPrice }}</td>
                 <td v-if="product.image" class="border px-6 py-4">
                     <img :src="product.image" alt="product image" class="w-10 h-10 object-cover">
                 </td>
-                <td class="border px-6 py-4">{{ product.stock }}</td>
-                <td class="border px-6 py-4">{{ product.reorderLevel }}</td>
-                <td class="border px-6 py-4">{{ product.sku }}</td>
-                <td class="border px-6 py-4">{{ formatDateTime(product.createdAt) }}</td>
-                <td class="border px-6 py-4">{{ formatDateTime(product.updatedAt) }}</td>
+                <td class="px-6 py-4">{{ product.stock }}</td>
+                <td class="px-6 py-4">{{ product.reorderLevel }}</td>
+                <td class="px-6 py-4">{{ product.sku }}</td>
+                <td class="px-6 py-4">{{ formatDateTime(product.createdAt) }}</td>
+                <td class="px-6 py-4">{{ formatDateTime(product.updatedAt) }}</td>
                 <td class="px-6 py-4 flex flex-row items-center justify-center gap-2">
                     <span class="material-symbols-outlined cursor-pointer text-blue-600">visibility</span>
                     <span class="material-symbols-outlined cursor-pointer text-red-500">delete</span>

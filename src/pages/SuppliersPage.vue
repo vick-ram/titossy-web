@@ -33,7 +33,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr v-for="supplier in filteredSuppliers" :key="supplier.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hoveur:bg-gray-600">
+            <tr v-for="supplier in filteredSuppliers" :key="supplier.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                 <td class="px-6 py-4">{{ supplierStore.suppliers.indexOf(supplier) + 1 }}</td>
                 <td class="px-6 py-4">{{ supplier.id }}</td>
                 <td class="px-6 py-4">{{ supplier.fullName }}</td>
