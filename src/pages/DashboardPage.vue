@@ -151,7 +151,7 @@
         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
-                    <th scope="col" class="px -6 py-3">id</th>
+                    <th scope="col" class="px-6 py-3">id</th>
                     <th scope="col" class="px-6 py-3">bookingid</th>
                     <th scope="col" class="px-6 py-3">amount</th>
                     <th scope="col" class="px-6 py-3">method</th>
@@ -164,33 +164,15 @@
             </thead>
             <tbody>
                 <tr v-for="transaction in recentCustPayments" :key="transaction.paymentId"class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                    <td scope="row" class="px-6 py-4">
-                        {{ transaction.paymentId }}
-                    </td>
-                    <td class="px-6 py-4">
-                        {{ transaction.bookingId }}
-                    </td>
-                    <td class="px-6 py-4">
-                       {{ transaction.amount }}
-                    </td>
-                    <td class="px-6 py-4">
-                        {{ transaction.paymentMethod }}
-                    </td>
-                    <td class="px-6 py-4">
-                        {{ transaction.phoneNumber }}
-                    </td>
-                    <td class="px-6 py-4">
-                        {{ transaction.transactionCode }}
-                    </td>
-                    <td class="px-6 py-4">
-                        {{ transaction.paymentStatus }}
-                    </td>
-                    <td class="px-6 py-4">
-                        {{ formatDateTime(transaction.createdAt) }}
-                    </td>
-                    <td class="px-6 py-4">
-                        {{ formatDateTime(transaction.updatedAt) }}
-                    </td>
+                    <td scope="row" class="px-6 py-4">{{ transaction.paymentId }}</td>
+                    <td class="px-6 py-4">{{ transaction.bookingId }}</td>
+                    <td class="px-6 py-4">{{ transaction.amount }}</td>
+                    <td class="px-6 py-4">{{ transaction.paymentMethod }}</td>
+                    <td class="px-6 py-4">{{ transaction.phoneNumber }}</td>
+                    <td class="px-6 py-4">{{ transaction.transactionCode }}</td>
+                    <td class="px-6 py-4">{{ transaction.paymentStatus }}</td>
+                    <td class="px-6 py-4">{{ formatDateTime(transaction.createdAt) }}</td>
+                    <td class="px-6 py-4">{{ formatDateTime(transaction.updatedAt) }}</td>
                 </tr>
             </tbody>
         </table>
@@ -203,7 +185,7 @@
         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
-                    <th scope="col" class="px -6 py-3">id</th>
+                    <th scope="col" class="px-6 py-3">id</th>
                     <th scope="col" class="px -6 py-3">employee</th>
                     <th scope="col" class="px-6 py-3">orderid</th>
                     <th scope="col" class="px-6 py-3">supplier</th>
@@ -217,36 +199,16 @@
             </thead>
             <tbody>
                 <tr v-if="recentSupPayments.length !== 0" v-for="transaction in recentSupPayments" :key="transaction.paymentId"class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                    <td scope="row" class="px-6 py-4">
-                        {{ transaction.paymentId }}
-                    </td>
-                    <td class="px-6 py-4">
-                        {{ transaction.employee }}
-                    </td>
-                    <td class="px-6 py-4">
-                       {{ transaction.orderId }}
-                    </td>
-                    <td class="px-6 py-4">
-                        {{ transaction.suplier }}
-                    </td>
-                    <td class="px-6 py-4">
-                        {{ formatDateTime(transaction.paymentDate) }}
-                    </td>
-                    <td class="px-6 py-4">
-                        {{ transaction.amount }}
-                    </td>
-                    <td class="px-6 py-4">
-                        {{ transaction.method }}
-                    </td>
-                    <td class="px-6 py-4">
-                        {{ transaction.paymentReference }}
-                    </td>
-                    <td class="px-6 py-4">
-                        {{ transaction.status }}
-                    </td>
-                    <td class="px-6 py-4">
-                        {{ formatDateTime(transaction.updatedAt) }}
-                    </td>
+                    <td scope="row" class="px-6 py-4">{{ transaction.paymentId }}</td>
+                    <td class="px-6 py-4">{{ transaction.employee }}</td>
+                    <td class="px-6 py-4">{{ transaction.orderId }}</td>
+                    <td class="px-6 py-4">{{ transaction.suplier }}</td>
+                    <td class="px-6 py-4">{{ formatDateTime(transaction.paymentDate) }}</td>
+                    <td class="px-6 py-4">{{ transaction.amount }}</td>
+                    <td class="px-6 py-4">{{ transaction.method }}</td>
+                    <td class="px-6 py-4">{{ transaction.paymentReference }}</td>
+                    <td class="px-6 py-4">{{ transaction.status }}</td>
+                    <td class="px-6 py-4">{{ formatDateTime(transaction.updatedAt) }}</td>
                 </tr>
                 <tr v-else>
                     <td class="col-span-10 text-center py-4">No recent transactions</td>
