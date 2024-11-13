@@ -11,7 +11,6 @@ export const useProductStore = defineStore('product', {
             const res = await get('/product')
             if (res.data.status === 'success') {
                 this.products = res.data.data
-                console.log(res.data)
             }
         }
     }

@@ -85,19 +85,6 @@ export interface CustomerPayment {
     updatedAt: string;
 }
 
-export interface SupplierPayment {
-    paymentId: string;
-    employee: string;
-    orderId: string;
-    supplier: string;
-    paymentDate: string;
-    amount: string;
-    method: string;
-    paymentReference: string;
-    status: string;
-    updatedAt: string;
-}
-
 
 export interface JwtPayload {
     sub?: string;
@@ -191,6 +178,28 @@ export interface Booking {
     totalAmount: string;
     paid: boolean;
     bookingStatus: string;
+    createdAt: string;
+    updatedAt: string;
+}
+
+export interface SupplierTransaction {
+    paymentId: string;
+    employee: string;
+    orderId: string;
+    suplier: string;
+    paymentDate: string;
+    amount: string;
+    method: string;
+    paymentReference: string;
+    status: string;
+    updatedAt: string;
+}
+
+export interface Notification {
+    id: string;
+    message: string;
+    bookingId: string;
+    state: string;
     createdAt: string;
     updatedAt: string;
 }

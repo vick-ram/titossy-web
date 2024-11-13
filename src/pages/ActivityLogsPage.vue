@@ -12,49 +12,47 @@
         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
-                    <th scope="col" class="px-6 py-3">
-                        #
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        ID
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        userid
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        time
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        event-type
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        activity
-                    </th>
+                    <th scope="col" class="px-6 py-3">#</th>
+                    <th scope="col" class="px-6 py-3">ID</th>
+                    <th scope="col" class="px-6 py-3">userid</th>
+                    <th scope="col" class="px-6 py-3">time</th>
+                    <th scope="col" class="px-6 py-3">event-type</th>
+                    <th scope="col" class="px-6 py-3">activity</th>
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="activity in filteredActivityLogs" :key="activity.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hoveur:bg-gray-600">
+                <tr v-for="activity in paginatedActivityLogs" :key="activity.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hoveur:bg-gray-600">
                     <td class="px-6 py-4">
                         {{ activityLogStore.activityLogs.indexOf(activity) + 1 }}
                     </td>
-                    <td class="border px-6 py-4">
-                        {{ activity.id }}
-                    </td>
-                    <td class=" border px-6 py-4">
-                        {{ activity.userId }}
-                    </td>
-                    <td class="border px-6 py-4">
-                        {{ formatDateTime(activity.timestamp) }}
-                    </td>
-                    <td class="border px-6 py-4">
-                        {{ activity.eventType }}
-                    </td>
-                    <td class="border px-6 py-4">
-                        {{ activity.eventData }}
-                    </td>
+                    <td class="border px-6 py-4">{{ activity.id }}</td>
+                    <td class=" border px-6 py-4">{{ activity.userId }}</td>
+                    <td class="border px-6 py-4">{{ formatDateTime(activity.timestamp) }}</td>
+                    <td class="border px-6 py-4">{{ activity.eventType }}</td>
+                    <td class="border px-6 py-4">{{ activity.eventData }}</td>
                 </tr>
             </tbody>
         </table>
+        <div class="flex justify-between items-center mt-4 mb-3 p-2 space-x-2">
+            <div>
+                <p>Showing 10 of <span>{{ activityLogStore.activityLogs.length }}</span></p>
+            </div>
+            <div>
+                <button
+                    @click="goToPage(currentPage - 1)"
+                    :disabled="currentPage === 1"
+                    class="px-4 py-2 border rounded-lg text-gray-500 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300 disabled:bg-gray-300 dark:disabled:bg-gray-600 disabled:text-gray-400 disabled:cursor-not-allowed">
+                    Previous
+                </button>
+                <span class="px-4 py-2">{{ currentPage }} / {{ totalPages }}</span>
+                <button
+                    @click="goToPage(currentPage + 1)"
+                    :disabled="currentPage === totalPages"
+                    class="px-4 py-2 border rounded-lg text-gray-500 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300 disabled:bg-gray-300 dark:disabled:bg-gray-600 disabled:text-gray-400 disabled:cursor-not-allowed">
+                    Next
+                </button>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -67,15 +65,31 @@ import { genericFilter } from '../utils/genericFilter';
 const activityLogStore = useActivityLogStore();
 const isLoading = ref(false)
 const query = ref('')
+const currentPage = ref(1)
+const itemsPerPage = ref(10)
 
 
 const filteredActivityLogs = computed(() => {
     return genericFilter(activityLogStore.activityLogs, query.value, ['id', 'userId', 'timestamp', 'eventType', 'eventData'])
 })
 
+const paginatedActivityLogs = computed(() => {
+    const start = (currentPage.value - 1) * itemsPerPage.value
+    const end = start + itemsPerPage.value
+    return filteredActivityLogs.value.slice(start, end)
+})
+
+const totalPages = computed(() => Math.ceil(filteredActivityLogs.value.length / itemsPerPage.value))
+
 onMounted(async () => {
     isLoading.value = true
     await activityLogStore.getAll()
     isLoading.value = false
 })
+
+const goToPage = (page: number) => {
+    if (page >= 1 && page <= totalPages.value) {
+        currentPage.value = page
+    }
+}
 </script>

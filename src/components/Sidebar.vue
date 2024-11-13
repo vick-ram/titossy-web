@@ -8,7 +8,6 @@
         </RouterLink>
     </div>
     <nav>
-        <!-- Dashboard Link -->
         <RouterLink
           to="/"
           class="py-2.5 px-4 rounded transition duration-200 flex items-center space-x-2"
@@ -21,7 +20,6 @@
             <span class="font-semibold">Dashboard</span>
         </RouterLink>
 
-        <!-- Users Dropdown -->
         <div>
             <button
               @click="toggleUsersDropdown"
@@ -39,7 +37,6 @@
                 </span>
             </button>
 
-            <!-- Dropdown Items -->
             <div v-if="isUsersDropdownOpen" class="pl-6 space-y-2 py-2 transition-all duration-200 ease-in-out">
               <RouterLink
                 to="/customers"
@@ -79,7 +76,6 @@
             </div>
         </div>
 
-        <!-- Other Links -->
 
         <RouterLink
           to="/service"

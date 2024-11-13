@@ -145,60 +145,111 @@
         </div>
     </div>
     
-
     <ElevatedCard class="mt-6">
+    <h4 class="mb-5 text-gray-900 font-bold text-base">Customer Recent Transactions</h4>
     <div class="relative overflow-x-auto">
         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
-                    <th scope="col" class="px-6 py-3">Product name</th>
-                    <th scope="col" class="px-6 py-3">Color</th>
-                    <th scope="col" class="px-6 py-3">Category</th>
-                    <th scope="col" class="px-6 py-3">Price</th>
+                    <th scope="col" class="px -6 py-3">id</th>
+                    <th scope="col" class="px-6 py-3">bookingid</th>
+                    <th scope="col" class="px-6 py-3">amount</th>
+                    <th scope="col" class="px-6 py-3">method</th>
+                    <th scope="col" class="px-6 py-3">phone</th>
+                    <th scope="col" class="px-6 py-3">transaction code</th>
+                    <th scope="col" class="px-6 py-3">status</th>
+                    <th scope="col" class="px-6 py-3">paid on</th>
+                    <th scope="col" class="px-6 py-3">updated at</th>
                 </tr>
             </thead>
             <tbody>
-                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                        Apple MacBook Pro 17"
-                    </th>
-                    <td class="px-6 py-4">
-                        Silver
+                <tr v-for="transaction in recentCustPayments" :key="transaction.paymentId"class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                    <td scope="row" class="px-6 py-4">
+                        {{ transaction.paymentId }}
                     </td>
                     <td class="px-6 py-4">
-                        Laptop
+                        {{ transaction.bookingId }}
                     </td>
                     <td class="px-6 py-4">
-                        $2999
+                       {{ transaction.amount }}
+                    </td>
+                    <td class="px-6 py-4">
+                        {{ transaction.paymentMethod }}
+                    </td>
+                    <td class="px-6 py-4">
+                        {{ transaction.phoneNumber }}
+                    </td>
+                    <td class="px-6 py-4">
+                        {{ transaction.transactionCode }}
+                    </td>
+                    <td class="px-6 py-4">
+                        {{ transaction.paymentStatus }}
+                    </td>
+                    <td class="px-6 py-4">
+                        {{ formatDateTime(transaction.createdAt) }}
+                    </td>
+                    <td class="px-6 py-4">
+                        {{ formatDateTime(transaction.updatedAt) }}
                     </td>
                 </tr>
-                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                        Microsoft Surface Pro
-                    </th>
-                    <td class="px-6 py-4">
-                        White
+            </tbody>
+        </table>
+    </div>
+    </ElevatedCard>
+    
+    <ElevatedCard class="mt-6">
+    <h4 class="mb-5 text-gray-600 font-bold text-base">Supplier Recent Transactions</h4>
+    <div class="relative overflow-x-auto">
+        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
+                <tr>
+                    <th scope="col" class="px -6 py-3">id</th>
+                    <th scope="col" class="px -6 py-3">employee</th>
+                    <th scope="col" class="px-6 py-3">orderid</th>
+                    <th scope="col" class="px-6 py-3">supplier</th>
+                    <th scope="col" class="px-6 py-3">paid on</th>
+                    <th scope="col" class="px-6 py-3">amount</th>
+                    <th scope="col" class="px-6 py-3">method</th>
+                    <th scope="col" class="px-6 py-3">reference</th>
+                    <th scope="col" class="px-6 py-3">status</th>
+                    <th scope="col" class="px-6 py-3">updated at</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-if="recentSupPayments.length !== 0" v-for="transaction in recentSupPayments" :key="transaction.paymentId"class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                    <td scope="row" class="px-6 py-4">
+                        {{ transaction.paymentId }}
                     </td>
                     <td class="px-6 py-4">
-                        Laptop PC
+                        {{ transaction.employee }}
                     </td>
                     <td class="px-6 py-4">
-                        $1999
+                       {{ transaction.orderId }}
+                    </td>
+                    <td class="px-6 py-4">
+                        {{ transaction.suplier }}
+                    </td>
+                    <td class="px-6 py-4">
+                        {{ formatDateTime(transaction.paymentDate) }}
+                    </td>
+                    <td class="px-6 py-4">
+                        {{ transaction.amount }}
+                    </td>
+                    <td class="px-6 py-4">
+                        {{ transaction.method }}
+                    </td>
+                    <td class="px-6 py-4">
+                        {{ transaction.paymentReference }}
+                    </td>
+                    <td class="px-6 py-4">
+                        {{ transaction.status }}
+                    </td>
+                    <td class="px-6 py-4">
+                        {{ formatDateTime(transaction.updatedAt) }}
                     </td>
                 </tr>
-                <tr class="bg-white dark:bg-gray-800">
-                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                        Magic Mouse 2
-                    </th>
-                    <td class="px-6 py-4">
-                        Black
-                    </td>
-                    <td class="px-6 py-4">
-                        Accessories
-                    </td>
-                    <td class="px-6 py-4">
-                        $99
-                    </td>
+                <tr v-else>
+                    <td class="col-span-10 text-center py-4">No recent transactions</td>
                 </tr>
             </tbody>
         </table>
@@ -214,13 +265,21 @@ import { useProductStore } from '../store/productStore'
 import {useCustomerStore} from '../store/customerStore'
 import {useSupplierStore} from '../store/supplierStore'
 import { useEmployeeStore } from '../store/employeeStore'
-import {useServiceStore} from '../store/serviceStore'
+import { useServiceStore } from '../store/serviceStore'
+import { useTransactionStore } from '../store/transactionStore'
+import { formatDateTime } from '../utils/dateFormatter';
 
 const serviceStore = useServiceStore()
 const productStore = useProductStore()
 const customerStore = useCustomerStore()
 const supplierStore = useSupplierStore()
 const employeeStore = useEmployeeStore()
+const transactionStore = useTransactionStore()
+
+const recentCustPayments = computed(() => transactionStore.recentCustomerTransactions)
+const recentSupPayments = computed(() => transactionStore.recentSupplierTransactions)
+
+console.log('Recent Customer Payments', recentCustPayments.value)
 
 
 const totalUsers = computed(() => {
@@ -247,6 +306,8 @@ onMounted(async () => {
     await employeeStore.getAll()
     await productStore.getAll()
     await serviceStore.getAllServices()
+    await transactionStore.getAllCustomerTransactions()
+    await transactionStore.getAllSupplierTransactions()
 })
 
 

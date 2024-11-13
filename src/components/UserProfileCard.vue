@@ -180,6 +180,7 @@ import ElevatedCard from './ElevatedCard.vue';
 import { useRouter } from 'vue-router'
 import { useEmployeeStore } from '../store/employeeStore'
 import {jwtDecode} from 'jwt-decode'
+import { get } from '../boot';
 
 const username = ref('Vickram Odero');
 const isDarkMode = ref(false);
@@ -190,8 +191,6 @@ const employeeStore = useEmployeeStore()
 
 const decodedToken = jwtDecode(String(localStorage.getItem('token')))
 const userId = decodedToken.sub
-
-console.log(userId)
 
 const toggleDarkMode = () => {
   isDarkMode.value = !isDarkMode.value
@@ -212,10 +211,11 @@ const logout = () => {
   isModalVisible.value = false;
 }
 
-onMounted(() => {
-  employeeStore.getAdmin(userId as string)
+onMounted(async () => {
+  // await employeeStore.getAdmin(String(userId))
+  await get(`/employee/admin`)
     .then((res) => {
-      console.log(res)
-    })
+    console.log(res)
+  })
   })
 </script>
