@@ -10,9 +10,9 @@
             />
         </div>
         <!-- Table -->
-         <div class="w-full overflow-x-auto shadow-md rounded-lg">
+         <div class="w-full overflow-x-auto ">
         <table class="w-full mt-4 bg-white dark:bg-gray-800 rounded-lg">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
                 <tr class="text-left rtl:text-right">
                     <th class="px-4 py-2 bg-gray-100 dark:bg-gray-700">#</th>
                     <th class="px-4 py-2 bg-gray-100 dark:bg-gray-700">ID</th>
