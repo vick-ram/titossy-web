@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <ElevatedCard class="mt-5">
         <div class="flex flex-column sm:flex-row flex-wrap space-y-4 sm:space-y-0 items-center justify-between pb-4">
         <div>
             <button  @click="toggleDrawer" type="button" class="bg-blue-700 hover:bg-blue-800 text-white ocus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Create</button>
@@ -29,46 +29,28 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-if="serviceStore.addons" v-for="addon in filteredAddons" :key="addon.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hoveur:bg-gray-600">
-                    <td class="px-6 py-4">
-                        {{ serviceStore.addons.indexOf(addon) + 1 }}
-                    </td>
-                    <td class="border px-6 py-4">
-                        {{ addon.id }}
-                    </td>
-                    <td class="border px-6 py-4">
-                        {{ addon.serviceId }}
-                    </td>
-                    <td class=" border px-6 py-4">
-                        {{ addon.name }}
-                    </td>
-                    <td class="border px-6 py-4">
-                        {{ addon.description }}
-                    </td>
-                    <td class="border px-6 py-4">
-                        {{ addon.price }}
-                    </td>
-                    <td v-if="addon.imageUrl" class="border px-6 py-4">
+                <tr v-if="serviceStore.addons" v-for="addon in filteredAddons" :key="addon.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                    <td class="px-6 py-4">{{ serviceStore.addons.indexOf(addon) + 1 }}</td>
+                    <td class="px-6 py-4">{{ addon.id }}</td>
+                    <td class="px-6 py-4">{{ addon.serviceId }}</td>
+                    <td class="px-6 py-4">{{ addon.name }}</td>
+                    <td class="px-6 py-4">{{ addon.description }}</td>
+                    <td class="px-6 py-4">{{ addon.price }}</td>
+                    <td v-if="addon.imageUrl" class="px-6 py-4">
                         <img :src="addon.imageUrl" alt="service image" class="w-10 h-10 object-cover">
                     </td>
-                    <td class="border px-6 py-4">
-                        {{ formatDateTime(addon.createdAt) }}
-                    </td>
-                    <td class="border px-6 py-4">
-                        {{ formatDateTime(addon.updatedAt) }}
-                    </td>
+                    <td class="px-6 py-4">{{ formatDateTime(addon.createdAt) }}</td>
+                    <td class="px-6 py-4">{{ formatDateTime(addon.updatedAt) }}</td>
                     <td class="px-6 py-4 flex flex-row items-center justify-center gap-2">
                         <span class="material-symbols-outlined cursor-pointer text-blue-600">visibility</span>
                         <span class="material-symbols-outlined cursor-pointer text-red-500">delete</span>
                     </td>
                 </tr>
-                <tr v-else>
-                    {{ serviceStore.errorMessage }}
-                </tr>
+                <tr v-else>{{ serviceStore.errorMessage }}</tr>
         </tbody>
         </table>
         </div>
-    </div>
+    </ElevatedCard>
         <RightDrawer :drawerOpen="isDrawerOpen" @toggle="toggleDrawer">
             <div class="flex justify-center">
                 <h5 class="mb-6 text-base font-semibold text-gray-500 uppercase dark:text-gray-400">Enter Service Addon Data</h5>
@@ -124,7 +106,8 @@ import { useRoute } from 'vue-router'
 import RightDrawer from '../components/RightDrawer.vue'
 import { post } from '../boot'
 import { Addon, ApiResponse } from '../models/constants'
-import {useToastStore} from '../store/toastStore'
+import { useToastStore } from '../store/toastStore'
+import ElevatedCard from '../components/ElevatedCard.vue'
 
 
 const serviceStore = useServiceStore()
