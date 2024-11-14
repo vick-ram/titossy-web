@@ -1,6 +1,6 @@
 <template>
     <ElevatedCard class="mt-5">
-        <div class="w-full flex flex-row justify-end">
+        <div class="w-full flex flex-row justify-end mb-2">
             <!-- Search input -->
             <input
                 v-model="search"
@@ -11,7 +11,7 @@
         </div>
         <!-- Table -->
          <div class="w-full overflow-x-auto ">
-        <table class="w-full mt-4 bg-white dark:bg-gray-800 rounded-lg">
+        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
                 <tr class="text-left rtl:text-right">
                     <th class="px-4 py-2 bg-gray-100 dark:bg-gray-700">#</th>
@@ -30,7 +30,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="booking in filteredBookings" :key="booking.bookingId" class="border-b">
+                <tr v-for="booking in filteredBookings" :key="booking.bookingId" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                     <td class="px-4 py-2">{{ bookingStore.bookings.indexOf(booking) + 1 }}</td>
                     <td class="px-4 py-2">{{ booking.bookingId }}</td>
                     <td class="px-4 py-2">{{ booking.customer }}</td>

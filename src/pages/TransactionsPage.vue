@@ -1,7 +1,7 @@
 <template>
     <div class="w-full mt-4">
         <ElevatedCard class="w-full overflow-x-auto">
-            <div class="flex items-center justify-between">
+            <div class="flex items-center justify-between mb-2">
                 <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Transactions</h2>
                 <label for="table-search" class="sr-only">Search</label>
                 <div class="relative">
@@ -12,7 +12,7 @@
                 </div>
             </div>
 
-            <table class="w-full mt-4 bg-white dark:bg-gray-800 rounded-lg">
+            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
                     <tr class="text-left rtl:text-right">
                         <th class="px-4 py-2 bg-gray-100 dark:bg-gray-700">#</th>

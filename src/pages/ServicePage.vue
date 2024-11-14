@@ -27,13 +27,13 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="service in filteredServices" :key="service.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hoveur:bg-gray-600">
+                <tr v-for="service in filteredServices" :key="service.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                     <td class="px-6 py-4">{{ serviceStore.services.indexOf(service) + 1 }}</td>
                     <td class="px-6 py-4">{{ service.id }}</td>
                     <td class="px-6 py-4">{{ service.name }}</td>
                     <td class="px-6 py-4">{{ service.description }}</td>
                     <td class="px-6 py-4">{{ service.price }}</td>
-                    <td v-if="service.imageUrl" class="border px-6 py-4">
+                    <td v-if="service.imageUrl" class="px-6 py-4">
                         <img :src="service.imageUrl" alt="service image" class="w-10 h-10 object-cover">
                     </td>
                     <td class="px-6 py-4">{{ formatDateTime(service.createdAt) }}</td>
