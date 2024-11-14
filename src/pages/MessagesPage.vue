@@ -1,105 +1,63 @@
 <template>
-    <div>
-        <h1>Messages Page</h1>
-        <ElevatedCard class="w-2/3 mx-auto">
-            <!-- Loop through messages -->
-            <div
-                v-for="message in messages"
-                :key="message.id"
-                :class="[
-                    'flex items-start gap-2.5 mb-4',
-                    message.isSender ? 'justify-end' : 'justify-start'
-                ]"
-            >
-                <!-- Display receiver's avatar if not sender -->
-                <img
-                    v-if="!message.isSender"
-                    class="w-8 h-8 rounded-full"
-                    src="../assets/images/avatar.jpg"
-                    alt="Receiver avatar"
-                />
-
-                <!-- Message Content -->
-                <div
-                    :class="[
-                        'flex flex-col gap-1 w-full max-w-[320px]',
-                        message.isSender ? 'text-right' : 'text-left'
-                    ]"
-                >
-                    <!-- Name and Timestamp -->
-                    <div class="flex items-center space-x-2 rtl:space-x-reverse">
-                        <span class="text-sm font-semibold text-gray-900 dark:text-white">
-                            {{ message.isSender ? 'You' : message.sender }}
-                        </span>
-                        <span class="text-sm font-normal text-gray-500 dark:text-gray-400">
-                            {{ message.time }}
-                        </span>
-                    </div>
-
-                    <!-- Message Bubble -->
-                    <div
-                        :class="[
-                            'flex flex-col p-4 rounded-lg',
-                            message.isSender ? 'bg-blue-500 text-white rounded-s-xl' : 'bg-gray-100 text-gray-900 dark:bg-gray-700 rounded-e-xl'
-                        ]"
-                    >
-                        <p class="text-sm font-normal">
-                            {{ message.content }}
-                        </p>
+    <!-- Main container for two-column layout -->
+    <div class="flex h-full items-start gap-2">
+        
+        <!-- Left section for listing users -->
+            <ElevatedCard class="w-1/3 p-4 mt-5">
+                <!-- Displaying card for each supplier; clicking navigates to chat view -->
+                <div 
+                    @click="selectSupplier(supplier)"
+                    v-for="supplier in supplierStore.suppliers"
+                    :key="supplier.id" 
+                    class="flex items-center justify-between mb-4 cursor-pointer">
+                    <div class="flex items-center gap-3">
+                        <img
+                            class="w-12 h-12 rounded-full"
+                            src="../assets/images/avatar.jpg"
+                            alt="Supplier avatar"
+                        />
+                        <div class="flex flex-col">
+                            <p class="text-lg font-semibold text-gray-900 dark:text-white">
+                                {{ supplier.fullName }}
+                            </p>
+                            <p class="text-sm font-normal text-gray-500 dark:text-gray-400">
+                                {{ supplier.email }}
+                            </p>
+                        </div>
                     </div>
                 </div>
-
-                <!-- Display sender's avatar if message is from sender -->
-                <img
-                    v-if="message.isSender"
-                    class="w-8 h-8 rounded-full"
-                    src="../assets/images/avatar.jpg"
-                    alt="Sender avatar"
-                />
+            </ElevatedCard>
+        
+        <!-- Right section for the chat view -->
+         <ElevatedCard class="w-2/3 mt-5 p-4">
+            <div v-if="selectedSupplier">
+                <p class="text-lg font-bold mb-2">Chat with {{ selectedSupplier?.fullName }}</p>
+                <ChatComponent v-if="selectedSupplier" :supplier="selectedSupplier" />
             </div>
-
-            <!-- Input field for new message -->
-            <div class="flex items-center gap-2.5 mt-4">
-                <input
-                    type="text"
-                    class="flex-1 p-2 rounded-lg border border-gray-200 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
-                    placeholder="Type a message..."
-                />
-                <button
-                    class="flex items-center justify-center w-10 h-10 rounded-full bg-blue-500 text-white -rotate-45"
-                >
-                    <span class="material-symbols-outlined">send</span>
-                </button>
+            <div v-else>
+                <p class="text-gray-500">Select a supplier to view the chat</p>
             </div>
-        </ElevatedCard>
+         </ElevatedCard>
+
     </div>
 </template>
 
 <script setup lang="ts">
+import { ref ,onMounted, Ref } from 'vue';
 import ElevatedCard from '../components/ElevatedCard.vue';
-// import {useWebsocket} from '../utils/useWebsocket'
+import { useSupplierStore } from '../store/supplierStore';
+import ChatComponent from '../components/ChatComponent.vue';
+import { Supplier } from '../models/constants';
 
-// Sample data structure
-const messages = [
-    {
-        id: 1,
-        sender: 'Bonnie Green',
-        time: '11:46',
-        content: "That's awesome. I think our users will really appreciate the improvements.",
-        isSender: false
-    },
-    {
-        id: 2,
-        sender: 'You',
-        time: '11:47',
-        content: "I agree! Let\’s push the update.",
-        isSender: true
-    },
-];
+const supplierStore = useSupplierStore();
+const selectedSupplier: Ref<Supplier | null> = ref(null);
 
-// const handleSend = () => {
-//     // Send message to the server
-// };
+const selectSupplier = (supplier: Supplier) => {
+    selectedSupplier.value = supplier;
+}
 
-
+onMounted(async () => {
+    await supplierStore.getAll();
+});
 </script>
+
