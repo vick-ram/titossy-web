@@ -1,10 +1,7 @@
-<template>
-    <!-- Main container for two-column layout -->
+<!-- <template>
     <div class="flex h-full items-start gap-2">
         
-        <!-- Left section for listing users -->
             <ElevatedCard class="w-1/3 p-4 mt-5">
-                <!-- Displaying card for each supplier; clicking navigates to chat view -->
                 <div 
                     @click="selectSupplier(supplier)"
                     v-for="supplier in supplierStore.suppliers"
@@ -28,7 +25,6 @@
                 </div>
             </ElevatedCard>
         
-        <!-- Right section for the chat view -->
          <ElevatedCard class="w-2/3 mt-5 p-4">
             <div v-if="selectedSupplier">
                 <p class="text-lg font-bold mb-2">Chat with {{ selectedSupplier?.fullName }}</p>
@@ -40,9 +36,9 @@
          </ElevatedCard>
 
     </div>
-</template>
+</template> -->
 
-<script setup lang="ts">
+<!-- <script setup lang="ts">
 import { ref ,onMounted, Ref } from 'vue';
 import ElevatedCard from '../components/ElevatedCard.vue';
 import { useSupplierStore } from '../store/supplierStore';
@@ -59,5 +55,65 @@ const selectSupplier = (supplier: Supplier) => {
 onMounted(async () => {
     await supplierStore.getAll();
 });
+</script> -->
+
+<template>
+  <ElevatedCard class="h-screen flex mt-5">
+    <!-- Chat List Panel -->
+    <ChatList
+      :chats="chats"
+      :selectedChat="selectedChat"
+      @selectChat="selectChat"
+    />
+
+    <!-- Message View Panel -->
+    <MessageView
+      v-if="selectedChat"
+      :messages="selectedChat.messages"
+      :chatTitle="selectedChat.name"
+      @sendMessage="sendMessage"
+    />
+    <div v-else class="flex-1 flex items-center justify-center text-gray-500">
+      Select a chat to start messaging
+    </div>
+    </ElevatedCard>
+</template>
+
+<script>
+import ChatList from '../components/ChatList.vue';
+import MessageView from '../components/MessageView.vue';
+import ElevatedCard from '../components/ElevatedCard.vue';
+
+export default {
+  name: 'ChatPage',
+  components: {
+    ChatList,
+    MessageView,
+  },
+  data() {
+    return {
+      chats: [
+        { id: 1, name: 'John Doe', messages: [{ text: 'Hi there!' }] },
+        { id: 2, name: 'Jane Smith', messages: [{ text: 'Hello!' }] },
+      ],
+      selectedChat: null,
+    };
+  },
+  methods: {
+    selectChat(chat) {
+      this.selectedChat = chat;
+    },
+    sendMessage(text) {
+      if (this.selectedChat) {
+        this.selectedChat.messages.push({ text });
+      }
+    },
+  },
+};
 </script>
+
+<style scoped>
+/* Basic styling */
+</style>
+
 

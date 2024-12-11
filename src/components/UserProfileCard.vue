@@ -89,7 +89,7 @@
         >
         <span class="material-symbols-outlined mr-2 text-gray-900 bg-gray-200 rounded-full p-2 dark:text-white">person</span>
         <span class="flex flex-col">
-          <p class="dark:text-white">{{ username }}</p>
+          <p class="dark:text-white">{{ employeeStore.employee.fullName }}</p>
           <p class="text-gray-300 text-sm">{{ employeeStore.employee.role }}</p>
         </span>
       </button>
@@ -123,14 +123,12 @@ import { computed, onMounted, onUnmounted, Ref, ref } from 'vue';
 import ElevatedCard from './ElevatedCard.vue';
 import { useRouter } from 'vue-router'
 import { useEmployeeStore } from '../store/employeeStore'
-// import {jwtDecode} from 'jwt-decode'
-// import { get } from '../boot';
+import {jwtDecode} from 'jwt-decode'
 import { useActivityLogStore } from '../store/activityLogStore'
 import { useToastStore } from '../store/toastStore'
 import {Notification} from '../models/constants'
 import { formatTimeAgo } from '../utils/formatTimeAgo';
 
-const username = ref('Vickram Odero');
 const isDarkMode = ref(false);
 const isModalVisible = ref(false);
 const emit = defineEmits(['theme-changed', 'menu-clicked'])
@@ -142,8 +140,8 @@ const toastStore = useToastStore()
 const notifications: Ref<Notification[]> = ref([])
 const showAllNotifications = ref(false)
 
-// const decodedToken = jwtDecode(String(localStorage.getItem('token')))
-// const userId = decodedToken.sub
+const decodedToken = jwtDecode(String(localStorage.getItem('token')))
+const userId = decodedToken.sub
 
 const toggleDarkMode = () => {
   isDarkMode.value = !isDarkMode.value
@@ -155,7 +153,7 @@ const toggleProfileModal = () => {
 }
 
 const goToProfile = () => {
-  router.push({ name: 'profile', params: { id: 1 } });
+  router.push({ name: 'profile', params: { id: employeeStore.employee.id } });
   isModalVisible.value = false;
 }
 
@@ -212,7 +210,7 @@ const markNotificationAsRead = async (id: string) => {
 }
 
 onMounted(async () => {
-  // await employeeStore.getAdmin(String(userId))
+  await employeeStore.getOne(String(userId))
     fetchUnreadNotifications()
 })
 onUnmounted(() => {

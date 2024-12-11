@@ -41,11 +41,13 @@
             <!-- Input field for new message -->
             <div class="flex items-center gap-2.5 mt-4">
                 <input
+                    v-model="message"
                     type="text"
                     class="flex-1 p-2 rounded-lg border border-gray-200 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
                     placeholder="Type a message..."
                 />
                 <button
+                    @click="sendMessage"
                     class="flex items-center justify-center w-10 h-10 rounded-full bg-blue-500 text-white -rotate-45"
                 >
                     <span class="material-symbols-outlined">send</span>
@@ -62,15 +64,25 @@ import ElevatedCard from '../components/ElevatedCard.vue';
 import { ApiResponse, Message, Supplier } from '../models/constants';
 import { jwtDecode } from 'jwt-decode'
 import {useToastStore} from '../store/toastStore'
-
-// import {useWebsocket} from '../utils/useWebsocket'
+import {useWebsocket, WebsocketClient} from '../utils/useWebsocket'
 
 const token = localStorage.getItem('token');
 const decodedToken = jwtDecode(String(token));
 const senderId = decodedToken.sub
 const toastStore = useToastStore()
-
+const message = ref('')
 const errorMessage = ref('')
+
+const props = defineProps<{
+    supplier: Supplier;
+}>();
+
+const websocket = useWebsocket(
+    `wss://vickram.tech/api/chat/${props.supplier.id}`,
+    message.value
+)
+
+console.log(websocket.isConnected)
 
 const isSender = (sender: string) => sender === senderId;
 const getMessageClass = (message: Message) => {
@@ -81,10 +93,6 @@ const getMessageClass = (message: Message) => {
 }
 
 const messages: Ref<Message[]> = ref([]);
-
-const props = defineProps<{
-    supplier: Supplier;
-}>();
 
 const getMessages = async (receiver: string) => {
     try {
@@ -112,9 +120,16 @@ const getMessages = async (receiver: string) => {
     }
 }
 
-console.log(messages.value)
-console.log(senderId)
-console.log(props.supplier.id)
+const sendMessage = () => {
+    if (websocket.isConnected) {
+        websocket.sendMessage()
+    }
+}
+
+// const sendMessage = () => {
+//     const client = new WebsocketClient(`wss://vickram.tech/api/chat/${props.supplier.id}`)
+//     client.sendMessage(message.value)
+// }
 
 onMounted(async () => {
     await getMessages(props.supplier.id);

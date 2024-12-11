@@ -92,23 +92,11 @@ export const useEmployeeStore = defineStore('employee', {
                     throw new Error(res.data.error)
                 }
             } catch (error) {
-                this.errorMessage = String(error)
-            }
-        },
-
-        async getAdmin(id: string) {
-            try {
-                const res = await get<ApiResponse<Employee>>(`/employee/admin/${id}`)
-                if (res.data.status === 'success') {
-                    if (res.data.data) {
-                        this.employee = res.data.data
-                    }
+                if (error instanceof Error) {
+                    this.errorMessage = error.message
+                } else {
+                    this.errorMessage = String(error)
                 }
-                if (res.data.status === 'error') {
-                    throw new Error(res.data.error)
-                }
-            } catch (error) {
-                this.errorMessage = String(error)
             }
         },
 
