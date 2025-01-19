@@ -10,20 +10,19 @@
                     >
                         <span class="material-symbols-outlined text-white dark:text-slate-600">print</span>
                     </div>
-                    <div class="content">
+                    <div @click="$router.push({name: 'bookings'})" class="content cursor-pointer">
                         <p class="text-base text-gray-600 dark:text-gray-300">Bookings</p>
-                        <h4 class="text-2xl text-gray-800 dark:text-gray-100 font-medium">281</h4>
+                        <h4 class="text-2xl text-gray-800 dark:text-gray-100 font-medium">{{ bookingStore.totalBookings }}</h4>
                     </div>
                     <hr style="
                         width: 100%;
                         border: 0.5px solid #eee;
                         margin: 10px 0;
                     ">
-                    <p style="
-                        font-size: 18px;
-                        color: #888;
-                    ">
-                    <span class="metric">+55% </span>than last week</p>
+                    <p class="text-gray-600" >
+                        <span class="bg-blue-100 text-blue-800 text-xs font-bold me-2 px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300">2.5%</span>
+                        than last week
+                    </p>
                 </ElevatedCard>
                 <ElevatedCard class="relative p-6">
                     <div 
@@ -41,11 +40,10 @@
                         border: 0.5px solid #eee;
                         margin: 10px 0;
                     ">
-                    <p style="
-                        font-size: 18px;
-                        color: #888;
-                    ">
-                    <span class="metric">+55% </span>than last week</p>
+                    <p class="text-gray-600" >
+                        <span class="bg-blue-100 text-blue-800 text-xs font-bold me-2 px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300">2.5%</span>
+                        than last week
+                    </p>
                 </ElevatedCard>
                 <ElevatedCard class="relative p-6">
                     <div 
@@ -63,11 +61,10 @@
                         border: 0.5px solid #eee;
                         margin: 10px 0;
                     ">
-                    <p style="
-                        font-size: 18px;
-                        color: #888;
-                    ">
-                    <span class="metric">+55% </span>than last week</p>
+                    <p class="text-gray-600" >
+                        <span class="bg-blue-100 text-blue-800 text-xs font-bold me-2 px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300">2.5%</span>
+                        than last week
+                    </p>
                 </ElevatedCard>
                 <ElevatedCard class="relative p-6">
                     <div 
@@ -76,20 +73,19 @@
                     >
                         <span class="material-symbols-outlined text-white dark:text-slate-600">inventory</span>
                     </div>
-                    <div class="content">
+                    <div @click="$router.push({name: 'inventory'})" class="content cursor-pointer">
                         <p class="text-base text-gray-600 dark:text-gray-300">Products</p>
-                        <h4 class="text-2xl text-gray-800 dark:text-gray-100 font-medium">{{ totalProducts }}</h4>
+                        <h4 class="text-2xl text-gray-800 dark:text-gray-100 font-medium">{{ productStore.getTotalProducts }}</h4>
                     </div>
                     <hr style="
                         width: 100%;
                         border: 0.5px solid #eee;
                         margin: 10px 0;
                     ">
-                    <p style="
-                        font-size: 18px;
-                        color: #888;
-                    ">
-                    <span class="metric">+55% </span>than last week</p>
+                    <p class="text-gray-600" >
+                        <span class="bg-blue-100 text-blue-800 text-xs font-bold me-2 px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300">2.5%</span>
+                        than last week
+                    </p>
                 </ElevatedCard>
                 <ElevatedCard class="relative p-6">
                     <div 
@@ -98,7 +94,7 @@
                     >
                         <span class="material-symbols-outlined text-white dark:text-slate-600">calendar_month</span>
                     </div>
-                    <div class="content">
+                    <div @click="$router.push({name: 'service'})" class="content cursor-pointer">
                         <p class="text-base text-gray-600 dark:text-gray-300">Services</p>
                         <h4 class="text-2xl text-gray-800 dark:text-gray-100 font-medium">{{ serviceStore.services.length }}</h4>
                     </div>
@@ -107,11 +103,10 @@
                         border: 0.5px solid #eee;
                         margin: 10px 0;
                     ">
-                    <p style="
-                        font-size: 18px;
-                        color: #888;
-                    ">
-                    <span class="metric">+55% </span>than last week</p>
+                    <p class="text-gray-600" >
+                        <span class="bg-blue-100 text-blue-800 text-xs font-bold me-2 px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300">2.5%</span>
+                        than last week
+                    </p>
                 </ElevatedCard>
                 <ElevatedCard class="relative p-6">
                     <div 
@@ -122,18 +117,17 @@
                     </div>
                     <div class="content">
                         <p class="text-base text-gray-600 dark:text-gray-300">Addons</p>
-                        <h4 class="text-2xl text-gray-800 dark:text-gray-100 font-medium">{{ serviceStore.addons.length }}</h4>
+                        <h4 class="text-2xl text-gray-800 dark:text-gray-100 font-medium">{{ serviceStore.totalAddons }}</h4>
                     </div>
                     <hr style="
                         width: 100%;
                         border: 0.5px solid #eee;
                         margin: 10px 0;
                     ">
-                    <p style="
-                        font-size: 18px;
-                        color: #888;
-                    ">
-                    <span class="metric">+55% </span>than last week</p>
+                    <p class="text-gray-600" >
+                        <span class="bg-blue-100 text-blue-800 text-xs font-bold me-2 px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300">2.5%</span>
+                        than last week
+                    </p>
                 </ElevatedCard>
         </div>
 
@@ -231,6 +225,7 @@ import {useCustomerStore} from '../store/customerStore'
 import {useSupplierStore} from '../store/supplierStore'
 import { useEmployeeStore } from '../store/employeeStore'
 import { useServiceStore } from '../store/serviceStore'
+import { useBookingStore } from '../store/bookingStore'
 import { useTransactionStore } from '../store/transactionStore'
 import { formatDateTime } from '../utils/dateFormatter';
 
@@ -240,6 +235,7 @@ const customerStore = useCustomerStore()
 const supplierStore = useSupplierStore()
 const employeeStore = useEmployeeStore()
 const transactionStore = useTransactionStore()
+const bookingStore = useBookingStore()
 
 const recentCustPayments = computed(() => transactionStore.recentCustomerTransactions)
 const recentSupPayments = computed(() => transactionStore.recentSupplierTransactions)
@@ -273,6 +269,8 @@ onMounted(async () => {
     await serviceStore.getAllServices()
     await transactionStore.getAllCustomerTransactions()
     await transactionStore.getAllSupplierTransactions()
+    await serviceStore.getAllServiceAddons()
+    await bookingStore.getAllBookings()
 })
 
 

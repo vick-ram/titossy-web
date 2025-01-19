@@ -8,6 +8,11 @@ export const useBookingStore = defineStore('booking', {
         successMessage: '',
         errorMessage: ''
     }),
+    getters: {
+        totalBookings(state) {
+            return state.bookings.length
+        }
+    },
     actions: {
         async getAllBookings() { 
             try {

@@ -7,8 +7,16 @@ export const useServiceStore = defineStore('service', {
         services: [] as Service[],
         addons: [] as Addon[],
         errorMessage: '',
-        successMessage: ''
+        successMessage: '',
+        serviceAddons: [] as Addon[],
+        totalAddons: 0
     }),
+    getters: {
+        // compute all service addons count
+        totalAddonsCount(state) {
+            return state.addons.length
+        }
+    },
 
     actions: {
         async getAllServices() {
@@ -34,7 +42,6 @@ export const useServiceStore = defineStore('service', {
                 if (response.data.status === 'success') {
                     if (response.data.data) {
                         this.addons = response.data.data
-                        console.log(this.addons)
                     }
                 }
                 if (response.data.status === 'error') {
@@ -58,6 +65,32 @@ export const useServiceStore = defineStore('service', {
                 if (response.data.status === 'error') {
                     throw new Error(response.data.error)
                 }
+            } catch (error) {
+                if (error instanceof Error) {
+                    this.errorMessage = error.message
+                } else {
+                    this.errorMessage = String(error)
+                }
+            }
+        },
+
+        async getAllServiceAddons() {
+            this.serviceAddons = []
+            try {
+                if (this.services.length === 0) {
+                    console.warn('No services available to fetch addons.');
+                    return;
+                }
+
+                const promises = this.services.map(async (service) => {
+                    await this.getAllAddons(service.id)
+                    return this.addons
+                })
+                
+                const response = await Promise.all(promises)
+                // aggregate all addons
+                this.serviceAddons = response.flat()
+                this.totalAddons = this.serviceAddons.length
             } catch (error) {
                 if (error instanceof Error) {
                     this.errorMessage = error.message

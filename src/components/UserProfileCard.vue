@@ -78,8 +78,10 @@
           @click="toggleProfileModal"
         />
       </div>
+      
       <div
         v-if="isModalVisible"
+        ref="modalRef"
         class="absolute right-0 top-full mt-2 bg-white dark:bg-gray-800 rounded-lg shadow-lg py-2 w-48"
       >
       <div class="flex items-center space-x-4">
@@ -128,6 +130,8 @@ import { useActivityLogStore } from '../store/activityLogStore'
 import { useToastStore } from '../store/toastStore'
 import {Notification} from '../models/constants'
 import { formatTimeAgo } from '../utils/formatTimeAgo';
+import { initFlowbite } from 'flowbite'
+import { onClickOutside } from '@vueuse/core'
 
 const isDarkMode = ref(false);
 const isModalVisible = ref(false);
@@ -139,9 +143,16 @@ const toastStore = useToastStore()
 
 const notifications: Ref<Notification[]> = ref([])
 const showAllNotifications = ref(false)
+const modalRef = ref()
 
 const decodedToken = jwtDecode(String(localStorage.getItem('token')))
 const userId = decodedToken.sub
+
+const closeModal = () => {
+  isModalVisible.value = false
+}
+
+onClickOutside(modalRef, closeModal)
 
 const toggleDarkMode = () => {
   isDarkMode.value = !isDarkMode.value
@@ -158,8 +169,14 @@ const goToProfile = () => {
 }
 
 const logout = () => {
-  console.log("User logged out");
-  isModalVisible.value = false;
+  try {
+    employeeStore.signout()
+    router.push({name: 'sign-in'})
+    console.log("User logged out");
+    isModalVisible.value = false;
+  } catch (error) {
+    console.log(error.toString())
+  }
 }
 
 let eventSource: EventSource
@@ -212,6 +229,7 @@ const markNotificationAsRead = async (id: string) => {
 onMounted(async () => {
   await employeeStore.getOne(String(userId))
     fetchUnreadNotifications()
+    initFlowbite();
 })
 onUnmounted(() => {
   eventSource.close();
