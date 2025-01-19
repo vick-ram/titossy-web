@@ -64,7 +64,7 @@ import ElevatedCard from '../components/ElevatedCard.vue';
 import { ApiResponse, Message, Supplier } from '../models/constants';
 import { jwtDecode } from 'jwt-decode'
 import {useToastStore} from '../store/toastStore'
-import {useWebsocket, WebsocketClient} from '../utils/useWebsocket'
+import {useWebsocket} from '../utils/useWebsocket'
 
 const token = localStorage.getItem('token');
 const decodedToken = jwtDecode(String(token));

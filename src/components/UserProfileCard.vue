@@ -175,7 +175,7 @@ const logout = () => {
     console.log("User logged out");
     isModalVisible.value = false;
   } catch (error) {
-    console.log(error.toString())
+    console.log(String(error))
   }
 }
 
