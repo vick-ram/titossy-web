@@ -11,7 +11,9 @@ export default {
   plugins: [
     require('flowbite/plugin')({
       charts: true
-    })
+    }),
+    require('@tailwindcss/typography'),
+    require("tailwind-scrollbar")
   ],
   darkMode: 'selector',
 }

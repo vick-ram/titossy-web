@@ -148,6 +148,10 @@ const modalRef = ref()
 const decodedToken = jwtDecode(String(localStorage.getItem('token')))
 const userId = decodedToken.sub
 
+const props = defineProps<{
+  isMobile?: boolean
+}>()
+
 const closeModal = () => {
   isModalVisible.value = false
 }
@@ -180,9 +184,14 @@ const logout = () => {
 }
 
 let eventSource: EventSource
+const environment = import.meta.env.VITE_ENVIRONMENT
+
+const url = environment === 'production'
+  ? import.meta.env.VITE_API_URL
+  : import.meta.env.VITE_API_URL_LOCAL
 
 const fetchUnreadNotifications = () => {
-  eventSource = new EventSource('https://www.vickram.tech/api/activities/notifications')
+  eventSource = new EventSource(`${url}/activities/notifications`)
   eventSource.onmessage = (event) => {
     let notificationsResponse = JSON.parse(event.data)
     handleIncomingNotifications(notificationsResponse)

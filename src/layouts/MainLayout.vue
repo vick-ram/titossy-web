@@ -1,45 +1,80 @@
 <template>
-    <div class="flex h-screen">
-        <!-- Sidebar -->
-        <aside
-            :class="[ 
-                'w-0 sm:w-64 bg-white text-white flex-shrink-0 shadow-lg dark:bg-gray-900 z-20 transition-transform duration-300', 
-                isSidebarOpen ? 'translate-x-0' : '-translate-x-full' 
-            ]"
-            class="fixed inset-y-0 transform"
-        >
-            <Sidebar />
-        </aside>
+  <div :class="[isDesktop() || isTablet() ? 'flex' : 'block', 'h-screen']">
+    <!-- Sidebar - Mobile: off-canvas, Desktop: always visible -->
+    <aside
+      :class="[
+        'fixed inset-y-0 z-20 transform bg-white text-white shadow-lg transition-transform duration-300 dark:bg-gray-900',
+        {
+          'left-0 translate-x-0 w-64':
+            isSidebarOpen && (isDesktop() || isTablet()),
+          'left-0 -translate-x-full w-64':
+            !isSidebarOpen && (isDesktop() || isTablet()),
+          'left-0 translate-x-0 w-40': isSidebarOpen && isMobile(),
+          'left-0 -translate-x-full w-40': !isSidebarOpen && isMobile(),
+        },
+      ]"
+    >
+      <Sidebar @close="handleSidebarClose" />
+    </aside>
 
-        <!-- Main Content Area -->
-        <div
-            :class="[ 
-                'flex-1 relative bg-white dark:bg-black overflow-auto transition-all duration-300', 
-                isSidebarOpen ? 'ml-64' : 'ml-0' 
-            ]"
-        >
-            <!-- Header with UserProfileCard taking full width -->
-            <header 
-                class="fixed top-0 right-0 left-0 p-4 z-10 bg-white dark:bg-gray-900 shadow-md"
-                :class="isSidebarOpen ? 'left-64' : 'left-0'"
-            >
-                <UserProfileCard @menu-clicked="toggleSidebar" @theme-changed="handleDarkModeToggle" />
-            </header>
+    <!-- Overlay for mobile sidebar -->
+    <div
+      v-if="isMobile() && isSidebarOpen"
+      class="fixed inset-0 z-10 bg-black bg-opacity-50"
+      @click="toggleSidebar"
+    />
 
-            <!-- Main Content with margin to avoid overlap with header -->
-            <main class="mt-5 pt-20 p-6 bg-gray-200 dark:bg-gray-700">
-                <router-view />
-            </main>
-        </div>
+    <!-- Main Content Area -->
+    <div
+      :class="[
+        'relative flex-1 overflow-y-auto scrollbar-thin bg-white transition-all duration-300 dark:bg-black',
+        {
+          'ml-0':
+            (isMobile() && !isSidebarOpen) ||
+            ((isDesktop() || isTablet()) && !isSidebarOpen),
+          'ml-40': isMobile() && isSidebarOpen,
+          'ml-64': (isDesktop() || isTablet()) && isSidebarOpen,
+        },
+      ]"
+    >
+      <!-- Header -->
+      <header
+        class="fixed top-0 z-10 bg-white p-4 shadow-md dark:bg-gray-900"
+        :class="{
+          'left-0 right-0': isMobile() || !isSidebarOpen,
+          'left-64 right-0': (isDesktop() || isTablet()) && isSidebarOpen,
+        }"
+      >
+        <UserProfileCard
+          :is-mobile="isMobile"
+          @menu-clicked="toggleSidebar"
+          @theme-changed="handleDarkModeToggle"
+        />
+      </header>
+
+      <!-- Main Content -->
+      <main
+        class="mt-5 bg-gray-200 p-6 pt-20 dark:bg-gray-700"
+        :class="{
+          'ml-0': true,
+        }"
+      >
+        <router-view />
+      </main>
     </div>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { ref, watchEffect } from 'vue';
-import Sidebar from '../components/Sidebar.vue';
-import UserProfileCard from '../components/UserProfileCard.vue';
+import { ref, watchEffect, onMounted } from "vue";
+import Sidebar from "../components/Sidebar.vue";
+import UserProfileCard from "../components/UserProfileCard.vue";
+import { useBreakpoints } from "../utils/breakpoints";
+
+const { currentBreakpoint, isMobile, isTablet, isDesktop } = useBreakpoints();
 
 const darkmode = ref(false);
+const isSidebarOpen = ref(true);
 
 const handleDarkModeToggle = (isDarkMode: boolean) => {
   darkmode.value = isDarkMode;
@@ -48,19 +83,38 @@ const handleDarkModeToggle = (isDarkMode: boolean) => {
 
 const toggleHtmlDarkClass = () => {
   if (darkmode.value) {
-      document.documentElement.classList.add('dark');
+    document.documentElement.classList.add("dark");
   } else {
-      document.documentElement.classList.remove('dark');
+    document.documentElement.classList.remove("dark");
   }
 };
-const isSidebarOpen = ref(true);
+
 const toggleSidebar = () => {
-    isSidebarOpen.value = !isSidebarOpen.value;
+  isSidebarOpen.value = !isSidebarOpen.value;
+};
+
+// Autoclose sidebar on mobile when route changes
+const handleSidebarClose = () => {
+  if (isMobile()) {
+    isSidebarOpen.value = false;
+  }
 };
 
 watchEffect(() => {
   toggleHtmlDarkClass();
 });
+
+watchEffect(() => {
+  if (isMobile()) {
+    document.body.style.overflow = isSidebarOpen.value ? "hidden" : "auto";
+  } else {
+    document.body.style.overflow = "auto";
+  }
+});
+
+onMounted(() => {
+  if (isMobile()) {
+    isSidebarOpen.value = false;
+  }
+});
 </script>
-
-

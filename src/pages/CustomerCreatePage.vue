@@ -1,5 +1,5 @@
 <template>
-    <ElevatedCard>
+    <ElevatedCard class="mt-6">
         <div class="w-full mt-2">
         <form @submit.prevent="createCustomer" class="flex flex-col sm:grid sm:grid-cols-2 w-full mx-auto">
             <div class="mb-5 sm:mx-3">
@@ -28,6 +28,7 @@
         </form>
     </div>
     </ElevatedCard>
+
 </template>
 
 <script setup lang="ts">
