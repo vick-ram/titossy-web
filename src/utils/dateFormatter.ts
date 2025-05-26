@@ -14,3 +14,17 @@ export function formatDateTime(
 
     return date.toLocaleString('en-US', options).toUpperCase()
 }
+
+export function formatDate(
+    dateStr: string
+): string {
+    const date = new Date(dateStr)
+
+    const options: Intl.DateTimeFormatOptions = {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+    };
+
+    return date.toLocaleDateString('en-US', options).toUpperCase()
+}

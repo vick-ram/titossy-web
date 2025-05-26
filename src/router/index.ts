@@ -131,6 +131,11 @@ const routes = [
                 name: 'messages',
                 component: MessagesPage
             },
+            {
+                path: 'purchase-orders',
+                name: 'purchase_orders',
+                component: () => import('../pages/PurchaseOrdersPage.vue')
+            }
         ]
     },
     {

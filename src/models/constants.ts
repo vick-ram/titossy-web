@@ -95,7 +95,7 @@ export interface JwtPayload {
 }
 
 export interface ApiResponse<T> {
-  status: string;
+  status: "success" | "error";
   statusCode?: number;
   data?: T;
   message?: string;
@@ -199,6 +199,27 @@ export interface Notification {
   message: string;
   bookingId: string;
   state: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface PurchaseOrderItem {
+  purchaseOrderItemId: string;
+  product: string;
+  quantity: number;
+  unitPrice: string;
+  subtotal: string;
+}
+
+export interface PurchaseOrder {
+  purchaseOrderId: string;
+  employee: string;
+  supplier: string;
+  expectedDate: string;
+  items: PurchaseOrderItem[];
+  totalAmount: number;
+  paid: boolean;
+  orderStatus: string;
   createdAt: string;
   updatedAt: string;
 }

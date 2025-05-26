@@ -143,6 +143,20 @@
         <span class="font-semibold">Transactions</span>
       </RouterLink>
 
+      <!-- Purchase orders page -->
+      <RouterLink
+        to="/purchase-orders"
+        class="py-2.5 px-4 rounded transition duration-200 flex items-center"
+        :class="{
+          'bg-blue-500 text-white': $route.path === '/purchase-orders',
+          'hover:bg-gray-100 hover:text-gray-800 dark:hover:bg-gray-800 dark:hover:text-gray-400 text-gray-500 dark:text-gray-300':
+            $route.path !== '/purchase-orders',
+        }"
+      >
+        <span class="material-symbols-outlined mr-2">shopping_cart</span>
+        <span class="font-semibold">Purchase Orders</span>
+      </RouterLink>
+
       <RouterLink
         to="/activity-logs"
         class="py-2.5 px-4 rounded transition duration-200 flex items-center"

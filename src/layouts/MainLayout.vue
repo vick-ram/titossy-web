@@ -54,7 +54,7 @@
 
       <!-- Main Content -->
       <main
-        class="mt-5 bg-gray-200 p-6 pt-20 dark:bg-gray-700"
+        class="h-screen mt-5 bg-gray-200 p-6 pt-20 dark:bg-gray-700"
         :class="{
           'ml-0': true,
         }"
