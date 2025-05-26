@@ -68,7 +68,7 @@
 
 <script lang="ts" setup>
 import { ref, onMounted, computed } from "vue";
-import type { PurchaseOrder, PurchaseOrderItem } from "../models/constants";
+import type { PurchaseOrder } from "../models/constants";
 import { usePurchaseOrderStore } from "../store/purchase-order-store";
 import ElevatedCard from "../components/ElevatedCard.vue";
 import { formatDateTime, formatDate } from "../utils/dateFormatter";
@@ -90,15 +90,15 @@ const filteredPurchaseOrders = computed(() => {
     ])
 })
 
-const expandedOrders = ref<Set<string>>(new Set());
+// const expandedOrders = ref<Set<string>>(new Set());
 
-function toggle(orderId: string) {
-  if (expandedOrders.value.has(orderId)) {
-    expandedOrders.value.delete(orderId);
-  } else {
-    expandedOrders.value.add(orderId);
-  }
-}
+// function toggle(orderId: string) {
+//   if (expandedOrders.value.has(orderId)) {
+//     expandedOrders.value.delete(orderId);
+//   } else {
+//     expandedOrders.value.add(orderId);
+//   }
+// }
 
 onMounted(async () => {
   await purchaseOrderStore.fetchPurchaseOrders();

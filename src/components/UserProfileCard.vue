@@ -148,10 +148,6 @@ const modalRef = ref()
 const decodedToken = jwtDecode(String(localStorage.getItem('token')))
 const userId = decodedToken.sub
 
-const props = defineProps<{
-  isMobile?: boolean
-}>()
-
 const closeModal = () => {
   isModalVisible.value = false
 }

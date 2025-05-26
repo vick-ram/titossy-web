@@ -421,7 +421,6 @@ const customerStore = useCustomerStore();
 const toastStore = useToastStore();
 const query = ref("");
 const isDrawerOpen = ref(false);
-const isEditMode = ref(false);
 
 const customerDetailModalRef = ref<HTMLElement | null>(null);
 let modal: FlowbiteModal | null = null;

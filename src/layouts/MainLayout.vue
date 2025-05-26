@@ -71,7 +71,7 @@ import Sidebar from "../components/Sidebar.vue";
 import UserProfileCard from "../components/UserProfileCard.vue";
 import { useBreakpoints } from "../utils/breakpoints";
 
-const { currentBreakpoint, isMobile, isTablet, isDesktop } = useBreakpoints();
+const { isMobile, isTablet, isDesktop } = useBreakpoints();
 
 const darkmode = ref(false);
 const isSidebarOpen = ref(true);
