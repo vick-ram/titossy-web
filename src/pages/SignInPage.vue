@@ -1,5 +1,8 @@
 <template>
 <div class="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700">
+    <div class="flex justify-center items-center">
+        <img src="../assets//images//titossy-logo.png" alt="titossy logo" class="w-36 h-auto">
+    </div>
     <form @submit.prevent="adminSignin" class="space-y-6" action="#">
         <h5 class="text-xl font-medium text-gray-900 dark:text-white">Admin Signin</h5>
         <div>
