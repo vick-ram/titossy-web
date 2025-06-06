@@ -24,6 +24,13 @@ export const useEmployeeStore = defineStore("employee", {
       password: "",
     },
   }),
+  getters: {
+    getFilteredEmployees: (state) => {
+      return state.employees.filter((employee) => {
+        return employee.role !== Roles[Roles.ADMIN];
+      })
+    }
+  },
   actions: {
     updateNewStatus(newRole: Roles) {
       this.employeeData.role = newRole;
