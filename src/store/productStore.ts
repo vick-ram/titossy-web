@@ -1,4 +1,4 @@
-import { get, post } from "../boot";
+import { get, post, del } from "../boot";
 import { defineStore } from "pinia";
 import { ApiResponse, Product } from "../models/constants";
 
@@ -15,11 +15,25 @@ export const useProductStore = defineStore("product", {
       image: null as File | null,
       stock: "",
       reorderLevel: "",
+      supplierId: "",
     },
   }),
   getters: {
     getTotalProducts(state) {
       return state.products.length;
+    },
+    clearForm(state) {
+      state.inventoryProductData = {
+        name: "",
+        description: "",
+        unitPrice: "",
+        image: null,
+        stock: "",
+        reorderLevel: "",
+        supplierId: "",
+      };
+      state.successMessage = "";
+      state.errorMessage = "";
     },
   },
   actions: {
@@ -56,10 +70,8 @@ export const useProductStore = defineStore("product", {
           formData.append("image", this.inventoryProductData.image);
         }
         formData.append("stock", this.inventoryProductData.stock);
-        formData.append(
-          "reorder_level",
-          this.inventoryProductData.reorderLevel
-        );
+        formData.append("reorderLevel", this.inventoryProductData.reorderLevel);
+        formData.append("supplier_id", this.inventoryProductData.supplierId);
 
         const response = await post<ApiResponse<Product>>(
           "/product",
@@ -71,9 +83,12 @@ export const useProductStore = defineStore("product", {
           }
         );
         if (response.data.status === "success") {
-            this.successMessage = response.data.message || "Product created successfully.";
+          this.successMessage =
+            response.data.message || "Product created successfully.";
           if (response.data.data) {
             this.products.push(response.data.data);
+            // refresh data
+            await this.getAll();
           } else {
             throw new Error("Product creation failed, no data returned.");
           }
@@ -90,6 +105,32 @@ export const useProductStore = defineStore("product", {
         } else {
           this.errorMessage = String(error);
         }
+      } finally {
+        this.loading = false;
+      }
+    },
+    async deleteProduct(productId: string) {
+      this.loading = true;
+      try {
+        const response = await del<ApiResponse<null>>(`/product/${productId}`);
+        if (response.data.status === "success") {
+          this.successMessage =
+            response.data.message || "Product deleted successfully.";
+          // Refresh the products list after deletion
+          await this.getAll();
+        } else if (response.data.status === "error") {
+          if (response.data.error) {
+            throw new Error(response.data.error);
+          }
+        }
+      } catch (error) {
+        if (error instanceof Error) {
+          this.errorMessage = error.message;
+        } else {
+          this.errorMessage = String(error);
+        }
+      } finally {
+        this.loading = false;
       }
     },
   },

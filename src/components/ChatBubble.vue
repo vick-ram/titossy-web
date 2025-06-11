@@ -6,27 +6,17 @@
     ]"
   >
     <p>{{ message }}</p>
-    <span class="text-xs opacity-70">{{ timestamp }}</span>
+    <span class="text-xs opacity-70">{{ formatDateTime(timestamp) }}</span>
   </div>
 </template>
 
-<script>
-export default {
-  name: "ChatBubble",
-  props: {
-    message: {
-      type: String,
-      required: true
-    },
-    timestamp: {
-      type: String,
-      required: true
-    },
-    isSender: {
-      type: Boolean,
-      default: false
-    }
-  }
-};
+<script setup lang="ts">
+import { formatDateTime } from '../utils/dateFormatter';
+
+defineProps<{
+  message: string;
+  timestamp: string;
+  isSender?: boolean;
+}>();
 </script>
 

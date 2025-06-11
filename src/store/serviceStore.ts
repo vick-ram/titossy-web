@@ -61,6 +61,7 @@ export const useServiceStore = defineStore('service', {
                     if (response.data.message) {
                         this.successMessage = response.data.message
                     }
+                    await this.getAllServices() // Refresh the services list after deletion
                 }
                 if (response.data.status === 'error') {
                     throw new Error(response.data.error)
@@ -91,6 +92,26 @@ export const useServiceStore = defineStore('service', {
                 // aggregate all addons
                 this.serviceAddons = response.flat()
                 this.totalAddons = this.serviceAddons.length
+            } catch (error) {
+                if (error instanceof Error) {
+                    this.errorMessage = error.message
+                } else {
+                    this.errorMessage = String(error)
+                }
+            }
+        },
+        async deleteAddon(addonId: string) {
+            try {
+                const response = await del<ApiResponse<null>>(`/addon/${addonId}`)
+                if (response.data.status === 'success') {
+                    if (response.data.message) {
+                        this.successMessage = response.data.message
+                    }
+                    await this.getAllServiceAddons() // Refresh the addons list after deletion
+                }
+                if (response.data.status === 'error') {
+                    throw new Error(response.data.error)
+                }
             } catch (error) {
                 if (error instanceof Error) {
                     this.errorMessage = error.message

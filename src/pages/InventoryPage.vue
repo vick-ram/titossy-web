@@ -95,6 +95,7 @@
                 >visibility</span
               >
               <span
+              @click="deleteProduct(product.productId)"
                 class="material-symbols-outlined cursor-pointer text-red-500"
                 >delete</span
               >
@@ -239,6 +240,25 @@
           required
         />
       </div>
+
+      <div class="mb-3">
+        <label for="supplier" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Supplier</label>
+        <select
+          v-model="productStore.inventoryProductData.supplierId"
+          id="supplier"
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          required
+        >
+          <option value="" disabled>Select supplier</option>
+          <option
+            v-for="supplier in supplierStore.suppliers"
+            :key="supplier.id"
+            :value="supplier.id"
+          >
+            {{ supplier.fullName }}
+          </option>
+        </select>
+      </div>
       <LoadingButton label="Submit" :loading="productStore.loading" />
     </form>
   </RightDrawer>
@@ -253,8 +273,10 @@ import ElevatedCard from "../components/ElevatedCard.vue";
 import RightDrawer from "../components/RightDrawer.vue";
 import LoadingButton from "../components/LoadingButton.vue";
 import { useToastStore } from "../store/toastStore";
+import { useSupplierStore } from "../store/supplierStore";
 
 const productStore = useProductStore();
+const supplierStore = useSupplierStore();
 const toastStore = useToastStore();
 const query = ref("");
 const isDrawerOpen = ref(false);
@@ -279,11 +301,12 @@ const createProduct = async () => {
   if (productStore.successMessage) {
     isDrawerOpen.value = false;
     toastStore.showToast(productStore.successMessage, "success");
+    productStore.clearForm
   }
 
-    if (productStore.errorMessage) {
-        toastStore.showToast(productStore.errorMessage, "error");
-    }
+  if (productStore.errorMessage) {
+    toastStore.showToast(productStore.errorMessage, "error");
+  }
 };
 
 const filteredProducts = computed(() => {
@@ -293,7 +316,21 @@ const filteredProducts = computed(() => {
     "sku",
   ]);
 });
+
+const deleteProduct = async (productId: string) => {
+  await productStore.deleteProduct(productId);
+  if (productStore.successMessage) {
+    toastStore.showToast(productStore.successMessage, "success");
+  }
+
+  if (productStore.errorMessage) {
+    toastStore.showToast(productStore.errorMessage, "error");
+  }
+};
+
 onMounted(async () => {
   await productStore.getAll();
+  // fetch the suppliers
+  await supplierStore.getAll();
 });
 </script>

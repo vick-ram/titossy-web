@@ -9,20 +9,28 @@
         class="p-3 rounded-lg mb-2 cursor-pointer hover:bg-blue-50"
         @click="$emit('selectChat', chat)"
       >
-        {{ chat.name }}
+        <div class="font-medium">{{ chat.name }}</div>
+        <div class="text-xs text-gray-500">{{ chat.role }}</div>
       </li>
+      
     </ul>
   </div>
 </template>
 
-<script>
-export default {
-  name: 'ChatList',
-  props: {
-    chats: Array,
-    selectedChat: Object,
+<script setup lang="ts">
+import type { Chat } from "../models/constants";
+
+
+defineProps({
+  chats: {
+    type: Array as () => Chat[],
+    required: true,
   },
-};
+  selectedChat: {
+    type: Object as () => Chat | null,
+    default: null,
+  },
+});
 </script>
 
 <style scoped>

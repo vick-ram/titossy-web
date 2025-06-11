@@ -48,7 +48,7 @@ export class WebsocketClient {
 
         this.socket.onopen = () => {
             console.log('WebSocket connection established')
-            this.socket?.send('Hello from the client!')
+            // this.socket?.send('Hello from the client!')
         }
 
         this.socket.onmessage = (event: MessageEvent) => {
@@ -68,6 +68,7 @@ export class WebsocketClient {
         if (this.socket?.readyState === WebSocket.OPEN) {
             this.socket.send(message)
         } else {
+            this
             console.error('WebSocket is not open')
         }
     }

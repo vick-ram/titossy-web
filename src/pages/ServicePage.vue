@@ -88,7 +88,9 @@
               class="material-symbols-outlined cursor-pointer text-blue-600"
               >visibility</span
             >
-            <span class="material-symbols-outlined cursor-pointer text-red-500"
+            <span
+            @click="deleteService(service.id)"
+            class="material-symbols-outlined cursor-pointer text-red-500"
               >delete</span
             >
           </td>
@@ -213,7 +215,7 @@
 
 <script setup lang="ts">
 import { formatDateTime } from "../utils/dateFormatter";
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, ref, watchEffect } from "vue";
 import { useServiceStore } from "../store/serviceStore";
 import { genericFilter } from "../utils/genericFilter";
 import RightDrawer from "../components/RightDrawer.vue";
@@ -253,6 +255,14 @@ const serviceData = ref<{
   imageUrl: "",
   imageFile: null,
 });
+
+const clearForm = () => {
+  serviceData.value.name = "";
+  serviceData.value.description = "";
+  serviceData.value.price = "";
+  serviceData.value.imageUrl = "";
+  serviceData.value.imageFile = null;
+};
 
 const onFileSelect = (e: Event) => {
   const target = e.target as HTMLInputElement;
@@ -299,6 +309,12 @@ const createService = async () => {
       setTimeout(() => {
         toastStore.showToast(String(response.data.message), "success");
       }, 3000);
+      if (response.data.data) {
+        serviceStore.services.push(response.data.data);
+      }
+      await serviceStore.getAllServices();
+      clearForm();
+
     }
     if (response.data.status === "error") {
       throw new Error(String(response.data.error));
@@ -317,6 +333,22 @@ const createService = async () => {
     isDrawerOpen.value = !isDrawerOpen.value;
   }
 };
+
+const deleteService = async (id: string) => {
+  try {
+    await serviceStore.deleteService(id);
+  } catch (e) {
+    if (e instanceof Error) {
+      setTimeout(() => {
+        toastStore.showToast(e.message, "error");
+      }, 3000);
+    } else {
+      setTimeout(() => {
+        toastStore.showToast(String(e), "error");
+      }, 3000);
+    }
+  }
+}
 
 onMounted(async () => {
   await serviceStore.getAllServices();

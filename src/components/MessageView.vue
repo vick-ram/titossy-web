@@ -2,24 +2,14 @@
   <div class="flex-1 flex flex-col h-full p-4">
     <!-- Chat Title -->
     <div class="border-b pb-2 mb-4 text-lg font-semibold">{{ chatTitle }}</div>
-
-    <!-- Messages Display Area -->
-    <!-- <div class="flex-1 overflow-y-auto mb-4 space-y-3">
-        <div
-            v-for="(message, index) in messages"
-            :key="index"
-             class="text-sm text-gray-900 dark:text-white">
-                {{ message.text }}
-        </div>
-    </div> -->
     <div class="flex flex-col p-4 space-y-2 overflow-y-auto h-96 bg-gray-100">
-        <ChatBubble
+      <ChatBubble
         v-for="(message, index) in messages"
         :key="index"
-        :message="message.text"
+        :message="message.message"
         :timestamp="message.timestamp"
-        :isSender="message.isSender"
-        />
+        :isSender="message.sender === currentUserId"
+      />
     </div>
 
     <!-- Message Input Area -->
@@ -38,30 +28,25 @@
   </div>
 </template>
 
-<script>
-import ChatBubble from './ChatBubble.vue';
-export default {
-    components: {
-        ChatBubble,
-    },
-  name: 'MessageView',
-  props: {
-    messages: Array,
-    chatTitle: String,
-  },
-  data() {
-    return {
-      newMessage: '',
-    };
-  },
-  methods: {
-    send() {
-      if (this.newMessage.trim()) {
-        this.$emit('sendMessage', this.newMessage.trim());
-        this.newMessage = '';
-      }
-    },
-  },
+<script setup lang="ts">
+import { ref } from "vue";
+import ChatBubble from "./ChatBubble.vue";
+import type { Message } from "../models/constants";
+
+defineProps<{
+  messages: Message[];
+  chatTitle: string;
+  currentUserId?: string;
+}>();
+
+const emit = defineEmits(["sendMessage"]);
+
+const newMessage = ref("");
+const send = () => {
+  if (newMessage.value.trim()) {
+    emit("sendMessage", newMessage.value.trim());
+    newMessage.value = "";
+  }
 };
 </script>
 

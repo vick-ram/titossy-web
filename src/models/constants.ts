@@ -131,14 +131,6 @@ export interface Addon {
   updatedAt: string;
 }
 
-export interface Message {
-  id: string;
-  message: string;
-  sender: string;
-  receiver: string;
-  timestamp: string;
-}
-
 interface BookingItem {
   service?: string;
   serviceAddOn?: string;
@@ -222,4 +214,25 @@ export interface PurchaseOrder {
   orderStatus: string;
   createdAt: string;
   updatedAt: string;
+}
+
+export type Message = {
+  id: string;
+  message: string;
+  sender: string;
+  receiver: string;
+  timestamp: string;
+};
+
+export type MessageState = {
+  loading: boolean;
+  messages: Message[];
+  error: string;
+};
+
+export type Chat = {
+  id: string
+  name: string
+  role: string
+  messages: Message[]
 }
