@@ -215,7 +215,7 @@
 
 <script setup lang="ts">
 import { formatDateTime } from "../utils/dateFormatter";
-import { computed, onMounted, ref, watchEffect } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useServiceStore } from "../store/serviceStore";
 import { genericFilter } from "../utils/genericFilter";
 import RightDrawer from "../components/RightDrawer.vue";
