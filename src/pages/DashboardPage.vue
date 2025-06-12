@@ -66,7 +66,7 @@
         <div class="content">
           <p class="text-base text-gray-600 dark:text-gray-300">Revenue</p>
           <h4 class="text-2xl text-gray-800 dark:text-gray-100 font-medium">
-            10,000
+            {{ metricStore.metricsData.payments?.net ?? '--' }}
           </h4>
         </div>
         <hr style="width: 100%; border: 0.5px solid #eee; margin: 10px 0" />
@@ -290,6 +290,7 @@ import { useServiceStore } from "../store/serviceStore";
 import { useBookingStore } from "../store/bookingStore";
 import { useTransactionStore } from "../store/transactionStore";
 import { formatDateTime } from "../utils/dateFormatter";
+import { useMetricStore } from "../store/metric-store";
 
 const serviceStore = useServiceStore();
 const productStore = useProductStore();
@@ -298,6 +299,7 @@ const supplierStore = useSupplierStore();
 const employeeStore = useEmployeeStore();
 const transactionStore = useTransactionStore();
 const bookingStore = useBookingStore();
+const metricStore = useMetricStore();
 
 const recentCustPayments = computed(
   () => transactionStore.recentCustomerTransactions
@@ -325,6 +327,8 @@ const totalUsers = computed(() => {
   return customerTotal + supplierTotal + employeeTotal;
 });
 
+console.log("Metric Data:", metricStore.metricsData);
+
 onMounted(async () => {
   await customerStore.getAll();
   await supplierStore.getAll();
@@ -335,7 +339,9 @@ onMounted(async () => {
   await transactionStore.getAllSupplierTransactions();
   await serviceStore.getAllServiceAddons();
   await bookingStore.getAllBookings();
+  await metricStore.fetchMetrics();
 });
+
 
 const totalProducts = computed(() => productStore.products.length);
 const productsArray = computed(() => productStore.products.map((product) => product.name));

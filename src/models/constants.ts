@@ -236,3 +236,41 @@ export type Chat = {
   role: string
   messages: Message[]
 }
+
+
+// Metrics
+export interface BookingsMetrics {
+  total: number;
+  daily: number;
+  weekly: number;
+  monthly: number;
+  yearly: number;
+}
+
+export interface PaymentsMetrics {
+  customerPayments: number;
+  supplierPayments: number;
+  net: number;
+}
+
+export interface UserRolesMetrics {
+  manager: number;
+  supervisor: number;
+  finance: number;
+  cleaner: number;
+  inventoryManager: number;
+}
+
+export interface UsersMetrics {
+  employees: number;
+  customers: number;
+  suppliers: number;
+  activeCleaners: number;
+  roles: UserRolesMetrics;
+}
+
+export interface MetricsData {
+  bookings: BookingsMetrics;
+  payments: PaymentsMetrics;
+  users: UsersMetrics;
+}
